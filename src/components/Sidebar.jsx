@@ -1,16 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 h-screen bg-gray-800 text-white p-4">
+    <aside>
       <nav>
         <ul>
-          <li>홈</li>
-          <li>상세페이지</li>
-          <li>마이페이지</li>
-          <li>QnA</li>
-          <li>장터</li>
-          <li>채팅</li>
+          <li><Link to="/">홈</Link></li>
+          <li><Link to="/mypage">마이페이지</Link></li>
+          <li><Link to="/qna">QnA</Link></li>
+          <li><Link to="/market">장터</Link></li>
+          <li><Link to="/chat">채팅</Link></li>
         </ul>
       </nav>
     </aside>
