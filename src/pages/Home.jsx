@@ -3,10 +3,9 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
-//ex market
 import api from '../utils/api';
 
-//open api
+// open api
 import {
   fetchExamSchedules,
   fetchQualificationDetail
@@ -15,6 +14,8 @@ import {
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [examEvents, setExamEvents] = useState([]);
+  const [items, setItems] = useState([]);
 
   const handleEventClick = (info) => {
     setSelectedEvent({
@@ -29,33 +30,44 @@ const Home = () => {
     setModalOpen(false);
     setSelectedEvent(null);
   };
-  //ex market api
-  const [items, setItems] = useState([]);
 
+  // 마켓 아이템 불러오기
   useEffect(() => {
     const fetchMarketItems = async () => {
       try {
-        const res = await api.get("/market"); 
+        const res = await api.get("/market");
         setItems(res.data.items);
-        console.log("📦 마켓 데이터:", res.data.items);
+        console.log("마켓 데이터:", res.data.items);
       } catch (err) {
-        console.error("❌ 마켓 불러오기 실패:", err);
+        console.error("마켓 fail:", err);
       }
     };
 
     fetchMarketItems();
   }, []);
 
-  //open api
+  // 시험 일정 및 자격정보 불러오기
   useEffect(() => {
     const load = async () => {
-      const examList = await fetchExamSchedules();
-      const qualDetail = await fetchQualificationDetail("1320");
-      
-      console.log("시험 일정:", examList);
-      console.log("자격 상세:", qualDetail);
+      try {
+        const examList = await fetchExamSchedules();
+        const qualDetail = await fetchQualificationDetail("1320");
+
+        console.log("시험 일정:", examList);
+        console.log("자격 상세:", qualDetail); 
+
+        const mappedEvents = examList.map((exam) => ({
+          title: exam.description || "시험 일정",
+          date: exam.docRegStartDt,
+          extendedProps: { ...exam }
+        }));
+
+        setExamEvents(mappedEvents);
+      } catch (err) {
+        console.error("시험 일정 불러오기 실패:", err);
+      }
     };
-  
+
     load();
   }, []);
 
@@ -68,22 +80,16 @@ const Home = () => {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         locale="ko"
-        events={[
-          {
-            title: '접수 시작',
-            date: '2025-02-15',
-            description: '접수 시작일',
-            extendedProps: {
-              url: 'https://www.q-net.or.kr', // 👉 사이트 주소
-            }
-          },
-        ]}
+        events={examEvents}
         eventClick={handleEventClick}
         height="auto"
       />
 
       {modalOpen && selectedEvent && (
-        <EventDetailModal selectedEvent={selectedEvent} onClose={handleClose}/>
+        <EventDetailModal
+          selectedEvent={selectedEvent}
+          onClose={handleClose}
+        />
       )}
     </div>
   );

@@ -2,28 +2,41 @@ import axios from "axios";
 
 const SERVICE_KEY = process.env.REACT_APP_SERVICE_KEY;
 
-const EXAM_SCHEDULE_API =
-  "https://api.odcloud.kr/api/15074408/v1/uddi:2cabcbd5-9b61-49b6-9463-fc193c682848";
-
 const QUALIFICATION_DETAIL_API =
   "http://openapi.q-net.or.kr/api/service/rest/InquiryInformationTradeNTQSVC/getList";
+
+  const EXAM_SCHEDULE_API =
+  "http://apis.data.go.kr/B490007/qualExamSchd/getQualExamSchdList";
 
 export const fetchExamSchedules = async () => {
   const res = await axios.get(EXAM_SCHEDULE_API, {
     params: {
-      page: 1,
-      perPage: 100,
-      serviceKey: decodeURIComponent(SERVICE_KEY),
+      ServiceKey: SERVICE_KEY,
+      jmCd: "1320",       
+      implYy: "2025",      
+      _type: "json",      
     },
   });
-  return res.data.data;
+
+  const items = res.data.response.body.items.item;
+
+  return items.map((item) => ({
+    implYy: item.implYy,
+    implSeq: item.implSeq,
+    description: item.description,
+    docRegStartDt: item.docRegStartDt,
+    docExamStartDt: item.docExamStartDt,
+    docPassDt: item.docPassDt,
+    pracExamStartDt: item.pracExamStartDt,
+    pracPassDt: item.pracPassDt,
+  }));
 };
 
 export const fetchQualificationDetail = async (jmCd) => {
   const res = await axios.get(QUALIFICATION_DETAIL_API, {
     params: {
       jmCd,
-      ServiceKey: decodeURIComponent(SERVICE_KEY),
+      ServiceKey: SERVICE_KEY,
     },
     responseType: "text",
   });
