@@ -5,11 +5,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
 
-// open api
 import {
-  fetchExamSchedules,
-  fetchQualificationDetail
-} from "../utils/open.api";
+  fetchQualificationList,
+  fetchQualificationDetail,
+} from '../utils/open.api';
+
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,31 +46,27 @@ const Home = () => {
     fetchMarketItems();
   }, []);
 
-  // 시험 일정 및 자격정보 불러오기
   useEffect(() => {
-    const load = async () => {
+    const loadQualificationData = async () => {
       try {
-        const examList = await fetchExamSchedules();
-        const qualDetail = await fetchQualificationDetail("1320");
+        const list = await fetchQualificationList();
+        console.log("📚 자격 목록:", list);
 
-        console.log("시험 일정:", examList);
-        console.log("자격 상세:", qualDetail); 
-
-        const mappedEvents = examList.map((exam) => ({
-          title: exam.description || "시험 일정",
-          date: exam.docRegStartDt,
-          extendedProps: { ...exam }
-        }));
-
-        setExamEvents(mappedEvents);
+        if (list.length > 0) {
+          const jmCd = list[0].jmCd;
+          const detail = await fetchQualificationDetail(jmCd);
+          console.log(`📘 '${jmCd}' 상세정보:`, detail);
+        }
       } catch (err) {
-        console.error("시험 일정 불러오기 실패:", err);
+        console.error("❌ 자격 정보 불러오기 실패:", err);
       }
     };
 
-    load();
+    loadQualificationData();
   }, []);
 
+
+  
   return (
     <div style={{ padding: '2rem' }}>
       <h1>🏠 자격증 달력 홈</h1>
