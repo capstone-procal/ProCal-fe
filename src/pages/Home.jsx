@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
+import { fetchExamEvents } from '../utils/openApi'; // 🔹 시험 일정 API 함수 추가
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -11,7 +12,6 @@ const Home = () => {
   const [examEvents, setExamEvents] = useState([]);
   const [items, setItems] = useState([]);
 
-  
   const handleEventClick = (info) => {
     setSelectedEvent({
       title: info.event.title,
@@ -26,7 +26,7 @@ const Home = () => {
     setSelectedEvent(null);
   };
 
-  // 마켓 아이템 불러오기
+  // 🛒 마켓 데이터 가져오기
   useEffect(() => {
     const fetchMarketItems = async () => {
       try {
@@ -41,6 +41,15 @@ const Home = () => {
     fetchMarketItems();
   }, []);
 
+  // 📅 시험 일정 데이터 가져오기
+  useEffect(() => {
+    const loadExamEvents = async () => {
+      const events = await fetchExamEvents(); // openApi.js 함수 호출
+      setExamEvents(events);
+    };
+
+    loadExamEvents();
+  }, []);
 
   return (
     <div style={{ padding: '2rem' }}>
