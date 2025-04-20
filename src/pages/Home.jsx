@@ -5,18 +5,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
 
-import {
-  fetchQualificationList,
-  fetchQualificationDetail,
-} from '../utils/open.api';
-
-
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [examEvents, setExamEvents] = useState([]);
   const [items, setItems] = useState([]);
 
+  
   const handleEventClick = (info) => {
     setSelectedEvent({
       title: info.event.title,
@@ -46,27 +41,7 @@ const Home = () => {
     fetchMarketItems();
   }, []);
 
-  useEffect(() => {
-    const loadQualificationData = async () => {
-      try {
-        const list = await fetchQualificationList();
-        console.log("📚 자격 목록:", list);
 
-        if (list.length > 0) {
-          const jmCd = list[0].jmCd;
-          const detail = await fetchQualificationDetail(jmCd);
-          console.log(`📘 '${jmCd}' 상세정보:`, detail);
-        }
-      } catch (err) {
-        console.error("❌ 자격 정보 불러오기 실패:", err);
-      }
-    };
-
-    loadQualificationData();
-  }, []);
-
-
-  
   return (
     <div style={{ padding: '2rem' }}>
       <h1>🏠 자격증 달력 홈</h1>
