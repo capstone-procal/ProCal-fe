@@ -13,14 +13,14 @@ const BASE_URL =
           dataFormat: "json",
           pageNo: 1,
           numOfRows: 100,
-          implYy: 2024,       // 시행년도
-          qualgbCd: "T",      // 자격구분코드: 국가기술자격
-          jmCd: "7910",       // 종목코드: 한식조리기능사
+          implYy: 2024,      
+          qualgbCd: "T",     
+          jmCd: "7910",      
         },
       });
   
-      console.log("📦 API 응답 전체:", response.data); // ✅ 추가
-      const items = response.data.body?.items || [];   // ❗ 안전하게 처리
+      console.log("📦 API 응답 전체:", response.data); 
+      const items = response.data.body?.items || [];   
       console.log("📋 추출된 items:", items);
   
       const events = items.map((item) => ({
