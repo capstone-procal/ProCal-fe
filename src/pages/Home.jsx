@@ -4,12 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
-
-import {
-  fetchQualificationList,
-  fetchQualificationDetail,
-} from '../utils/open.api';
-
+//import { fetchExamEvents } from '../utils/openApi'; 
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,8 +25,7 @@ const Home = () => {
     setModalOpen(false);
     setSelectedEvent(null);
   };
-
-  // 마켓 아이템 불러오기
+//market
   useEffect(() => {
     const fetchMarketItems = async () => {
       try {
@@ -45,28 +39,47 @@ const Home = () => {
 
     fetchMarketItems();
   }, []);
-
+//cal
   useEffect(() => {
-    const loadQualificationData = async () => {
-      try {
-        const list = await fetchQualificationList();
-        console.log("📚 자격 목록:", list);
+  const fetchCertificates = async () => {
+    try {
+      const res = await api.get("/certificate");
+      const certificates = res.data.certificates;
 
-        if (list.length > 0) {
-          const jmCd = list[0].jmCd;
-          const detail = await fetchQualificationDetail(jmCd);
-          console.log(`📘 '${jmCd}' 상세정보:`, detail);
-        }
-      } catch (err) {
-        console.error("❌ 자격 정보 불러오기 실패:", err);
-      }
-    };
+      const events = certificates.flatMap((cert) =>
+        cert.schedule.map((item) => ({
+          title: `${cert.name} (${item.round} ${item.type})`,
+          start: item.examStart,
+          end: new Date(new Date(item.examEnd).getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 캘린더는 end 미포함이라 +1일 필요함
+          extendedProps: {
+            certificateId: cert._id,
+            round: item.round,
+            type: item.type,
+            officialSite: cert.officialSite,
+            eligibility: cert.eligibility
+          }
+        }))
+      );
 
-    loadQualificationData();
-  }, []);
+      setExamEvents(events);
+      console.log("cal", events);
+    } catch (err) {
+      console.error("cla fail:", err);
+    }
+  };
 
+  fetchCertificates();
+}, []);
 
-  
+  // useEffect(() => {
+  //   const loadExamEvents = async () => {
+  //     const events = await fetchExamEvents(); 
+  //     setExamEvents(events);
+  //   };
+
+  //   loadExamEvents();
+  // }, []);
+
   return (
     <div style={{ padding: '2rem' }}>
       <h1>🏠 자격증 달력 홈</h1>
