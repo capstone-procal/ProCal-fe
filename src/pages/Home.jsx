@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
-import { fetchExamEvents } from '../utils/openApi'; 
+//import { fetchExamEvents } from '../utils/openApi'; 
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +25,7 @@ const Home = () => {
     setModalOpen(false);
     setSelectedEvent(null);
   };
-
+//market
   useEffect(() => {
     const fetchMarketItems = async () => {
       try {
@@ -39,15 +39,46 @@ const Home = () => {
 
     fetchMarketItems();
   }, []);
-
+//cal
   useEffect(() => {
-    const loadExamEvents = async () => {
-      const events = await fetchExamEvents(); 
-      setExamEvents(events);
-    };
+  const fetchCertificates = async () => {
+    try {
+      const res = await api.get("/certificate");
+      const certificates = res.data.certificates;
 
-    loadExamEvents();
-  }, []);
+      const events = certificates.flatMap((cert) =>
+        cert.schedule.map((item) => ({
+          title: `${cert.name} (${item.round} ${item.type})`,
+          start: item.examStart,
+          end: new Date(new Date(item.examEnd).getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 캘린더는 end 미포함이라 +1일 필요함
+          extendedProps: {
+            certificateId: cert._id,
+            round: item.round,
+            type: item.type,
+            officialSite: cert.officialSite,
+            eligibility: cert.eligibility
+          }
+        }))
+      );
+
+      setExamEvents(events);
+      console.log("cal", events);
+    } catch (err) {
+      console.error("cla fail:", err);
+    }
+  };
+
+  fetchCertificates();
+}, []);
+
+  // useEffect(() => {
+  //   const loadExamEvents = async () => {
+  //     const events = await fetchExamEvents(); 
+  //     setExamEvents(events);
+  //   };
+
+  //   loadExamEvents();
+  // }, []);
 
   return (
     <div style={{ padding: '2rem' }}>
