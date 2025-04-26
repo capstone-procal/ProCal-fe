@@ -1,0 +1,99 @@
+import React, { useState } from 'react';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import api from '../../utils/api'; 
+
+function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (inputEmail) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(inputEmail);
+  };
+
+  const handleEmailChange = (e) => {
+    const input = e.target.value;
+    setEmail(input);
+
+    if (!validateEmail(input)) {
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handleLogin = async () => {
+    if (emailError) {
+      return;
+    }
+
+    try {
+      const response = await api.post('/auth/login', { email, password });
+
+      const { token } = response.data;
+
+      sessionStorage.setItem('token', token);
+
+      console.log('로그인 성공, 토큰:', token);
+
+      setErrorMessage('');
+      onLoginSuccess();
+    } catch (error) {
+      console.error('로그인 실패:', error);
+      setErrorMessage(error.response?.data?.error || '로그인 실패');
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={onClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Login</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+
+        <Form>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="이메일 입력"
+              value={email}
+              onChange={handleEmailChange}
+              isInvalid={!!emailError} 
+            />
+            {emailError && (
+              <Form.Text className="text-danger">
+                {emailError}
+              </Form.Text>
+            )}
+          </Form.Group>
+
+          <Form.Group controlId="formPassword" className="mt-3">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="비밀번호 입력"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleLogin}>
+          Login
+        </Button>
+        <Button variant="secondary" onClick={onSwitchToSignup}>
+          Sign Up
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+export default LoginModal;

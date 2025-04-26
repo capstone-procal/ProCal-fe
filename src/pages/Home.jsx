@@ -4,7 +4,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../components/modals/ExamDetailModal';
 import api from '../utils/api';
-//import { fetchExamEvents } from '../utils/openApi'; 
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
