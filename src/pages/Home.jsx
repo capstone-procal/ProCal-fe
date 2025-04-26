@@ -38,6 +38,48 @@ const Home = () => {
 
     fetchMarketItems();
   }, []);
+//cal
+  useEffect(() => {
+  const fetchCertificates = async () => {
+    try {
+      const res = await api.get("/certificate");
+      const certificates = res.data.certificates;
+
+      const events = certificates.flatMap((cert) =>
+        cert.schedule
+          .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
+          .map((item) => ({
+          title: `${cert.name} (${item.round} ${item.type})`,
+          start: item.examStart,
+          end: new Date(new Date(item.examEnd).getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 캘린더는 end 미포함이라 +1일 필요함
+          extendedProps: {
+            certificateId: cert._id,
+            round: item.round,
+            type: item.type,
+            officialSite: cert.officialSite,
+            eligibility: cert.eligibility
+          }
+        }))
+      );
+
+      setExamEvents(events);
+      console.log("cal", events);
+    } catch (err) {
+      console.error("cla fail:", err);
+    }
+  };
+
+  fetchCertificates();
+}, []);
+
+  // useEffect(() => {
+  //   const loadExamEvents = async () => {
+  //     const events = await fetchExamEvents(); 
+  //     setExamEvents(events);
+  //   };
+
+  //   loadExamEvents();
+  // }, []);
 
   return (
     <div style={{ padding: '2rem' }}>
