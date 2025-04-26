@@ -47,7 +47,9 @@ const Home = () => {
       const certificates = res.data.certificates;
 
       const events = certificates.flatMap((cert) =>
-        cert.schedule.map((item) => ({
+        cert.schedule
+          .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
+          .map((item) => ({
           title: `${cert.name} (${item.round} ${item.type})`,
           start: item.examStart,
           end: new Date(new Date(item.examEnd).getTime() + 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 캘린더는 end 미포함이라 +1일 필요함
