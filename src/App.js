@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Detail from "./pages/Detail";
-import Mypage from "./pages/Mypage";
+import MyPage from "./pages/MyPage/MyPage";
 import QnA from "./pages/QnA";
 import Market from "./pages/Market";
 import Chat from "./pages/Chat";
@@ -43,7 +43,7 @@ function App() {
               isLoggedIn={isLoggedIn}
               onRequireLogin={handleRequireLogin}
             >
-              <Mypage />
+              <MyPage />
             </PrivateRoute>
           }
         />

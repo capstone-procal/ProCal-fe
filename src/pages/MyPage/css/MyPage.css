@@ -1,0 +1,61 @@
+.mypage-container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.mypage-header {
+  background: linear-gradient(to right, #aaa, #666);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.profile-image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin-right: 2rem;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #ddd;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.edit-text {
+  font-size: 0.9rem;
+  color: gray;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.exam-section {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.exam-list {
+  margin-top: 1rem;
+}
+
+.exam-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  font-weight: bold;
+}
