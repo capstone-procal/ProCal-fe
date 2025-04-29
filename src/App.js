@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import Home from "./pages/Home";
-import Detail from "./pages/Detail";
+import Home from "./pages/HomePage/Home";
+import Detail from "./pages/DetailPage/Detail";
 import MyPage from "./pages/MyPage/MyPage";
-import QnA from "./pages/QnA";
-import Market from "./pages/Market";
-import Chat from "./pages/Chat";
+import QnA from "./pages/QnAPage/QnA";
+import Market from "./pages/MarketPage/Market";
+import Chat from "./pages/ChatPage/Chat";
 import LoginModal from "./components/modals/LoginModal";
 import SignupModal from "./components/modals/SignupModal";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -35,7 +35,7 @@ function App() {
             <Home isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} />
           }
         />
-        <Route path="/detail" element={<Detail />} />
+        <Route path="/certificate/:id" element={<Detail />} />
         <Route
           path="/mypage"
           element={

@@ -38,7 +38,16 @@ const SearchBanner = () => {
   };
 
   return (
-    <div className="bg-white shadow p-4">
+    <div
+      style={{
+        backgroundColor: 'white',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        padding: '1.3rem',
+        marginLeft: '200px', 
+        boxSizing: 'border-box',
+      }}
+    >
+
       <input
         type="text"
         placeholder="자격증 검색..."
