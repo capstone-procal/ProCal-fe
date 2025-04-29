@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import EventDetailModal from '../components/modals/ExamDetailModal';
-import LoginModal from '../components/modals/LoginModal'; 
-import api from '../utils/api';
+import EventDetailModal from '../../components/modals/ExamDetailModal';
+import LoginModal from '../../components/modals/LoginModal'; 
+import api from '../../utils/api';
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -111,7 +111,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h1>🏠 자격증 달력 홈</h1>
 
       <FullCalendar
