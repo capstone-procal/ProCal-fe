@@ -25,24 +25,37 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
   };
 
   const handleLogin = async () => {
-    if (emailError) {
+    if (emailError || !email || !password) {
       return;
     }
 
     try {
       const response = await api.post('/auth/login', { email, password });
 
-      const { token } = response.data;
+      const { token, userId, userEmail } = response.data;
 
       sessionStorage.setItem('token', token);
+      sessionStorage.setItem('userId', userId);  
+      sessionStorage.setItem('userEmail', userEmail);
 
-      console.log('로그인 성공, 토큰:', token);
+      console.log('로그인 성공:', { token, userId });
 
       setErrorMessage('');
-      onLoginSuccess();
+      onClose();   
+      onLoginSuccess(); 
     } catch (error) {
       console.error('로그인 실패:', error);
-      setErrorMessage(error.response?.data?.error || '로그인 실패');
+      setErrorMessage(
+        error.response?.data?.error || 
+        error.message || 
+        '로그인 실패'
+      );
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -63,7 +76,8 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
               placeholder="이메일 입력"
               value={email}
               onChange={handleEmailChange}
-              isInvalid={!!emailError} 
+              isInvalid={!!emailError}
+              onKeyDown={handleKeyDown}
             />
             {emailError && (
               <Form.Text className="text-danger">
@@ -79,13 +93,18 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
               placeholder="비밀번호 입력"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown} 
             />
           </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" onClick={handleLogin}>
+        <Button 
+          variant="primary" 
+          onClick={handleLogin}
+          disabled={!email || !password || !!emailError} 
+        >
           Login
         </Button>
         <Button variant="secondary" onClick={onSwitchToSignup}>
