@@ -25,24 +25,23 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
   };
 
   const handleLogin = async () => {
-    if (emailError || !email || !password) {
-      return;
-    }
+    if (emailError || !email || !password) return;
 
     try {
       const response = await api.post('/auth/login', { email, password });
 
-      const { token, userId, userEmail } = response.data;
+      const { token, userId, userEmail, role } = response.data;
 
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('userId', userId);  
       sessionStorage.setItem('userEmail', userEmail);
+      sessionStorage.setItem('userRole', role); 
 
-      console.log('로그인 성공:', { token, userId });
+      console.log('로그인 성공:', { token, userId, role });
 
       setErrorMessage('');
-      onClose();   
-      onLoginSuccess(); 
+      onClose();
+      onLoginSuccess(role); 
     } catch (error) {
       console.error('로그인 실패:', error);
       setErrorMessage(
@@ -54,9 +53,7 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleLogin();
-    }
+    if (e.key === 'Enter') handleLogin();
   };
 
   return (
