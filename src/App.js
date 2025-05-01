@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/HomePage/Home';
@@ -20,7 +20,20 @@ function App() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    const role = sessionStorage.getItem('userRole');
+    if (token) {
+      setIsLoggedIn(true);
+      setUserRole(role || 'user');
+    }
+  }, []);
+
   const handleRequireLogin = () => {
+    setShowLoginModal(true);
+  };
+
+  const handleLoginClick = () => {
     setShowLoginModal(true);
   };
 
@@ -34,15 +47,16 @@ function App() {
     sessionStorage.clear();
     setIsLoggedIn(false);
     setUserRole(null);
-    navigate('/');
-  };
-
-  const handleLoginClick = () => {
-    setShowLoginModal(true);
+    navigate('/'); // 로그인 모달 뜨지 않도록 여기선 호출 안함
   };
 
   return (
-    <MainLayout userRole={userRole} isLoggedIn={isLoggedIn} onLogout={handleLogout} onLoginClick={handleLoginClick}>
+    <MainLayout
+      userRole={userRole}
+      isLoggedIn={isLoggedIn}
+      onLogout={handleLogout}
+      onLoginClick={handleLoginClick}
+    >
       <Routes>
         <Route
           path="/"
