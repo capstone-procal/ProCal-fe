@@ -7,12 +7,15 @@ import MyPage from "./pages/MyPage/MyPage";
 import QnA from "./pages/QnAPage/QnA";
 import Market from "./pages/MarketPage/Market";
 import Chat from "./pages/ChatPage/Chat";
+import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginModal from "./components/modals/LoginModal";
 import SignupModal from "./components/modals/SignupModal";
 import PrivateRoute from "./routes/PrivateRoute";
+import AdminRoute from "./routes/AdminRoute"; // 필요 시
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null); // 'admin' or 'user'
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const navigate = useNavigate();
@@ -21,13 +24,15 @@ function App() {
     setShowLoginModal(true);
   };
 
-  const handleLoginSuccess = () => {
+  // 로그인 성공 시 역할도 함께 저장
+  const handleLoginSuccess = (role = 'user') => {
     setIsLoggedIn(true);
+    setUserRole(role);
     setShowLoginModal(false);
   };
 
   return (
-    <MainLayout>
+    <MainLayout userRole={userRole}>
       <Routes>
         <Route
           path="/"
@@ -80,6 +85,14 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute isLoggedIn={isLoggedIn} userRole={userRole}>
+              <AdminPage />
+            </AdminRoute>
+          }
+        />
       </Routes>
 
       <LoginModal
@@ -87,8 +100,8 @@ function App() {
         onClose={() => setShowLoginModal(false)}
         onLoginSuccess={handleLoginSuccess}
         onSwitchToSignup={() => {
-          setShowLoginModal(false); 
-          setShowSignupModal(true); 
+          setShowLoginModal(false);
+          setShowSignupModal(true);
         }}
       />
 
@@ -96,8 +109,8 @@ function App() {
         show={showSignupModal}
         onClose={() => setShowSignupModal(false)}
         onSwitchToLogin={() => {
-          setShowSignupModal(false); 
-          setShowLoginModal(true); 
+          setShowSignupModal(false);
+          setShowLoginModal(true);
         }}
       />
     </MainLayout>
