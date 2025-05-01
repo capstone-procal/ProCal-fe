@@ -30,19 +30,18 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
     try {
       const response = await api.post('/auth/login', { email, password });
 
-      // 백엔드에서 role을 반드시 포함시켜야 합니다.
       const { token, userId, userEmail, role } = response.data;
 
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('userId', userId);  
       sessionStorage.setItem('userEmail', userEmail);
-      sessionStorage.setItem('userRole', role); // 추가 저장 (선택)
+      sessionStorage.setItem('userRole', role); 
 
       console.log('로그인 성공:', { token, userId, role });
 
       setErrorMessage('');
       onClose();
-      onLoginSuccess(role); // role을 App.js로 전달
+      onLoginSuccess(role); 
     } catch (error) {
       console.error('로그인 실패:', error);
       setErrorMessage(

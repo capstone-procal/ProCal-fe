@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
-import CertificationFormModal from './components/CertificationFormModal'; // 경로 확인 필요
+import CertificationFormModal from './components/CertificationFormModal'; 
 
 const ITEMS_PER_PAGE = 4;
 
@@ -34,7 +34,6 @@ const AdminPage = () => {
     }
   };
 
-  // 페이지 계산
   const totalPages = Math.ceil(certifications.length / ITEMS_PER_PAGE);
   const currentItems = certifications.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -88,7 +87,6 @@ const AdminPage = () => {
         </tbody>
       </table>
 
-      {/* 페이지네이션 */}
       <div className="mt-4 flex justify-center gap-2">
         {Array.from({ length: totalPages }, (_, i) => (
           <button

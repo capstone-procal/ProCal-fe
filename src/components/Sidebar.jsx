@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ userRole }) => {
+const Sidebar = ({ userRole, isLoggedIn, onLogout, onLoginClick }) => {
   return (
     <aside
       style={{
@@ -24,6 +24,39 @@ const Sidebar = ({ userRole }) => {
           <li style={{ marginBottom: '1rem' }}><Link to="/chat">채팅</Link></li>
           {userRole === 'admin' && (
             <li style={{ marginBottom: '1rem' }}><Link to="/admin">관리자페이지</Link></li>
+          )}
+          {!isLoggedIn ? (
+            <li>
+              <button
+                onClick={onLoginClick}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'blue',
+                  cursor: 'pointer',
+                  padding: 0,
+                  textDecoration: 'underline'
+                }}
+              >
+                로그인
+              </button>
+            </li>
+          ) : (
+            <li>
+              <button
+                onClick={onLogout}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'blue',
+                  cursor: 'pointer',
+                  padding: 0,
+                  textDecoration: 'underline'
+                }}
+              >
+                로그아웃
+              </button>
+            </li>
           )}
         </ul>
       </nav>
