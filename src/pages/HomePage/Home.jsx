@@ -84,7 +84,7 @@ const Home = () => {
       try {
         const res = await api.get("/certificate");
         const certificates = res.data.certificates;
-        const events = certificates.flatMap(cert => 
+        const events = certificates.flatMap(cert =>
           cert.schedule
             .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
             .map(item => ({
