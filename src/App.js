@@ -4,7 +4,9 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/HomePage/Home';
 import Detail from './pages/DetailPage/Detail';
 import MyPage from './pages/MyPage/MyPage';
-import QnA from './pages/QnAPage/QnA';
+import QnAListPage from './pages/QnAPage/QnAListPage';
+import QnAWritePage from './pages/QnAPage/QnA';
+import QnADetailPage from './pages/QnAPage/QnADetailPage';
 import Market from './pages/MarketPage/Market';
 import Chat from './pages/ChatPage/Chat';
 import AdminPage from './pages/AdminPage/AdminPage';
@@ -47,7 +49,7 @@ function App() {
     sessionStorage.clear();
     setIsLoggedIn(false);
     setUserRole(null);
-    navigate('/'); // 로그인 모달 뜨지 않도록 여기선 호출 안함
+    navigate('/');
   };
 
   return (
@@ -71,11 +73,20 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/qna" element={<QnAListPage />} />
         <Route
-          path="/qna"
+          path="/qna/write"
           element={
             <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
-              <QnA />
+              <QnAWritePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/qna/:postId"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
+              <QnADetailPage />
             </PrivateRoute>
           }
         />
