@@ -37,7 +37,6 @@ function CommentList({ postId }) {
     <div className="mt-4">
       <h5>댓글</h5>
 
-      {/* 댓글 작성 */}
       <Form className="mb-3">
         <Form.Control
           as="textarea"
@@ -53,7 +52,6 @@ function CommentList({ postId }) {
         </div>
       </Form>
 
-      {/* 댓글 리스트 */}
       <ListGroup>
         {comments.map((comment) => (
           <ListGroup.Item key={comment._id}>
