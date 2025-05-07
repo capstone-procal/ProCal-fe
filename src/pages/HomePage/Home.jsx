@@ -4,17 +4,19 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../../components/modals/ExamDetailModal';
-import LoginModal from '../../components/modals/LoginModal'; 
+import LoginModal from '../../components/modals/LoginModal';
 import api from '../../utils/api';
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [savedEvent, setSavedEvent] = useState(null); 
+  const [savedEvent, setSavedEvent] = useState(null);
   const [examEvents, setExamEvents] = useState([]);
   const [reminders, setReminders] = useState([]);
   const navigate = useNavigate();
+
+  const isLoggedIn = !!sessionStorage.getItem("token");
 
   const handleEventClick = (info) => {
     const event = {
@@ -31,12 +33,37 @@ const Home = () => {
     setSelectedEvent(null);
   };
 
-  const fetchReminders = async () => {
+  const fetchCertificates = async (reminderList = []) => {
     try {
-      const res = await api.get("/reminder");
-      setReminders(res.data.reminders);
+      const res = await api.get("/certificate");
+      const certificates = res.data.certificates;
+
+      const colorMap = reminderList.reduce((acc, r) => {
+        acc[r.certificateId._id] = r.color;
+        return acc;
+      }, {});
+
+      const events = certificates.flatMap(cert =>
+        cert.schedule
+          .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
+          .map(item => ({
+            title: `${cert.name} (${item.round} ${item.type})`,
+            start: item.examStart,
+            end: new Date(new Date(item.examEnd).getTime() + 86400000).toISOString().split("T")[0],
+            color: colorMap[cert._id],
+            extendedProps: {
+              certificateId: cert._id,
+              round: item.round,
+              type: item.type,
+              officialSite: cert.officialSite,
+              eligibility: cert.eligibility,
+            }
+          }))
+      );
+
+      setExamEvents(events);
     } catch (err) {
-      console.error("리마인더 불러오기 실패:", err?.error ?? err);
+      console.error("캘린더 로드 실패:", err?.error ?? err);
     }
   };
 
@@ -44,8 +71,8 @@ const Home = () => {
     const token = sessionStorage.getItem("token");
 
     if (!token) {
-      setSavedEvent(selectedEvent); 
-      setModalOpen(false); 
+      setSavedEvent(selectedEvent);
+      setModalOpen(false);
       setLoginModalOpen(true);
       return;
     }
@@ -62,7 +89,7 @@ const Home = () => {
         alert("찜 완료!");
       }
 
-      fetchReminders();
+      await loadInitialData();
       setModalOpen(false);
     } catch (error) {
       console.error("찜하기 실패:", error);
@@ -73,41 +100,29 @@ const Home = () => {
   const handleLoginSuccess = () => {
     setLoginModalOpen(false);
     if (savedEvent) {
-      setSelectedEvent(savedEvent); 
-      setModalOpen(true); 
-      setSavedEvent(null); 
+      setSelectedEvent(savedEvent);
+      setModalOpen(true);
+      setSavedEvent(null);
     }
+    loadInitialData();
+  };
+
+  const loadInitialData = async () => {
+    let reminderList = [];
+    if (isLoggedIn) {
+      try {
+        const res = await api.get("/reminder");
+        reminderList = res.data.reminders;
+        setReminders(reminderList);
+      } catch (e) {
+        console.error("reminder 불러오기 실패", e);
+      }
+    }
+    await fetchCertificates(reminderList);
   };
 
   useEffect(() => {
-    const fetchCertificates = async () => {
-      try {
-        const res = await api.get("/certificate");
-        const certificates = res.data.certificates;
-        const events = certificates.flatMap(cert =>
-          cert.schedule
-            .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
-            .map(item => ({
-              title: `${cert.name} (${item.round} ${item.type})`,
-              start: item.examStart,
-              end: new Date(new Date(item.examEnd).getTime() + 86400000).toISOString().split("T")[0],
-              extendedProps: {
-                certificateId: cert._id,
-                round: item.round,
-                type: item.type,
-                officialSite: cert.officialSite,
-                eligibility: cert.eligibility,
-              }
-            }))
-        );
-        setExamEvents(events);
-      } catch (err) {
-        console.error("캘린더 로드 실패:", err?.error ?? err);
-      }
-    };
-
-    fetchCertificates();
-    fetchReminders();
+    loadInitialData();
   }, []);
 
   return (
@@ -136,7 +151,7 @@ const Home = () => {
         <LoginModal
           show={loginModalOpen}
           onClose={() => setLoginModalOpen(false)}
-          onLoginSuccess={handleLoginSuccess} 
+          onLoginSuccess={handleLoginSuccess}
         />
       )}
     </div>

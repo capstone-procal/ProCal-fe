@@ -11,7 +11,7 @@ function QnAWriteModal({ show, onClose, onPostCreated }) {
     try {
       const res = await api.post("/post", { title, category, content });
       alert("게시글이 등록되었습니다.");
-      onPostCreated?.(res.data.post); // 목록 갱신용 콜백
+      onPostCreated?.(res.data.post); 
       setTitle("");
       setCategory("질문");
       setContent("");
