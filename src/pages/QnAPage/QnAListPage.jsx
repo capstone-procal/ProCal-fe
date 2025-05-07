@@ -1,58 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../../utils/api";
+import { Button } from "react-bootstrap";
+import QnAWriteModal from "./components/QnAWriteModal";
 import { useNavigate } from "react-router-dom";
 
 function QnAListPage() {
   const [posts, setPosts] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [categoryFilter, setCategoryFilter] = useState(""); 
-
+  const [showWriteModal, setShowWriteModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await api.get("/post");
-        setPosts(res.data.posts);
-        setFiltered(res.data.posts); 
-      } catch (err) {
-        alert(err.message || "게시글을 불러올 수 없습니다.");
-      }
-    };
     fetchPosts();
   }, []);
 
-  useEffect(() => {
-    if (categoryFilter === "") {
-      setFiltered(posts);
-    } else {
-      setFiltered(posts.filter(post => post.category === categoryFilter));
+  const fetchPosts = async () => {
+    try {
+      const res = await api.get("/post");
+      setPosts(res.data.posts);
+    } catch (err) {
+      alert("글 목록 로딩 실패");
     }
-  }, [categoryFilter, posts]);
+  };
 
   return (
-    <div>
-      <h2>Q&A 게시판</h2>
-      <div>
-        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-          <option value="">전체</option>
-          <option value="질문">질문</option>
-          <option value="자유">자유</option>
-          <option value="to관리자">to관리자</option>
-        </select>
-        <button onClick={() => navigate("/qna/write")}>글쓰기</button>
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Q&A</h2>
+        <Button onClick={() => setShowWriteModal(true)}>✏️ 글쓰기</Button>
       </div>
-      <ul>
-        {filtered.map((post) => (
-          <li
-            key={post._id}
-            onClick={() => navigate(`/qna/${post._id}`)}
-            style={{ cursor: "pointer", borderBottom: "1px solid #ddd", padding: "10px" }}
-          >
-            <strong>[{post.category}]</strong> {post.title} - {post.userId?.name}
-          </li>
-        ))}
-      </ul>
+
+      {posts.map((post) => (
+        <div
+          key={post._id}
+          className="mb-3 border-bottom pb-2"
+          onClick={() => navigate(`/qna/${post._id}`)}
+          style={{ cursor: "pointer" }}
+        >
+          <h5 className="mb-1">{post.title}</h5>
+          <small className="text-muted">카테고리: {post.category}</small>
+        </div>
+      ))}
+
+      <QnAWriteModal
+        show={showWriteModal}
+        onClose={() => setShowWriteModal(false)}
+        onPostCreated={fetchPosts}
+      />
     </div>
   );
 }
