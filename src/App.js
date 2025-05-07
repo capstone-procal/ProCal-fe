@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import Home from './pages/HomePage/Home';
-import Detail from './pages/DetailPage/Detail';
-import MyPage from './pages/MyPage/MyPage';
-import QnAListPage from './pages/QnAPage/QnAListPage';
-import QnAWritePage from './pages/QnAPage/QnA';
-import QnADetailPage from './pages/QnAPage/QnADetailPage';
-import Market from './pages/MarketPage/Market';
-import Chat from './pages/ChatPage/Chat';
-import AdminPage from './pages/AdminPage/AdminPage';
-import LoginModal from './components/modals/LoginModal';
-import SignupModal from './components/modals/SignupModal';
-import PrivateRoute from './routes/PrivateRoute';
-import AdminRoute from './routes/AdminRoute';
+import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import Home from "./pages/HomePage/Home";
+import Detail from "./pages/DetailPage/Detail";
+import MyPage from "./pages/MyPage/MyPage";
+import QnAListPage from "./pages/QnAPage/QnAListPage";
+import QnADetailPage from "./pages/QnAPage/QnADetailPage";
+import Market from "./pages/MarketPage/Market";
+import Chat from "./pages/ChatPage/Chat";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import LoginModal from "./components/modals/LoginModal";
+import SignupModal from "./components/modals/SignupModal";
+import PrivateRoute from "./routes/PrivateRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,11 +22,11 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const role = sessionStorage.getItem('userRole');
+    const token = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("userRole");
     if (token) {
       setIsLoggedIn(true);
-      setUserRole(role || 'user');
+      setUserRole(role || "user");
     }
   }, []);
 
@@ -39,7 +38,7 @@ function App() {
     setShowLoginModal(true);
   };
 
-  const handleLoginSuccess = (role = 'user') => {
+  const handleLoginSuccess = (role = "user") => {
     setIsLoggedIn(true);
     setUserRole(role);
     setShowLoginModal(false);
@@ -49,7 +48,7 @@ function App() {
     sessionStorage.clear();
     setIsLoggedIn(false);
     setUserRole(null);
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -62,30 +61,41 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} />}
+          element={
+            <Home isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin} />
+          }
         />
         <Route path="/certificate/:id" element={<Detail />} />
         <Route
           path="/mypage"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
               <MyPage />
             </PrivateRoute>
           }
         />
         <Route path="/qna" element={<QnAListPage />} />
         <Route
-          path="/qna/write"
+          path="/qna/:postId"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
-              <QnAWritePage />
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
+              <QnADetailPage />
             </PrivateRoute>
           }
         />
         <Route
           path="/qna/:postId"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
               <QnADetailPage />
             </PrivateRoute>
           }
@@ -93,7 +103,10 @@ function App() {
         <Route
           path="/market"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
               <Market />
             </PrivateRoute>
           }
@@ -101,7 +114,10 @@ function App() {
         <Route
           path="/chat"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn} onRequireLogin={handleRequireLogin}>
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
               <Chat />
             </PrivateRoute>
           }
@@ -109,7 +125,11 @@ function App() {
         <Route
           path="/admin"
           element={
-            <AdminRoute isLoggedIn={isLoggedIn} userRole={userRole} onRequireLogin={handleRequireLogin}>
+            <AdminRoute
+              isLoggedIn={isLoggedIn}
+              userRole={userRole}
+              onRequireLogin={handleRequireLogin}
+            >
               <AdminPage />
             </AdminRoute>
           }

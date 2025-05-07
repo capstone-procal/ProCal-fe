@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import CommentList from "./components/CommentList";
+import { Container, Form, Button, Card } from "react-bootstrap";
 
 function QnADetailPage() {
   const { postId } = useParams();
@@ -44,36 +45,75 @@ function QnADetailPage() {
     }
   };
 
-  if (!post) return <div>로딩 중...</div>;
+  if (!post) return <Container className="py-4">로딩 중...</Container>;
 
   return (
-    <div>
+    <Container className="py-4">
       {editMode ? (
-        <>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} /><br />
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="질문">질문</option>
-            <option value="자유">자유</option>
-            <option value="to관리자">to관리자</option>
-          </select><br />
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} /><br />
-          <button onClick={handleUpdate}>저장</button>
-          <button onClick={() => setEditMode(false)}>취소</button>
-        </>
+        <Card className="p-4">
+          <h3 className="mb-4">게시글 수정</h3>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>제목</Form.Label>
+              <Form.Control
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>카테고리</Form.Label>
+              <Form.Select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="질문">질문</option>
+                <option value="자유">자유</option>
+                <option value="to관리자">to관리자</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>내용</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </Form.Group>
+
+            <div className="d-flex justify-content-end gap-2">
+              <Button variant="secondary" onClick={() => setEditMode(false)}>
+                취소
+              </Button>
+              <Button variant="primary" onClick={handleUpdate}>
+                저장
+              </Button>
+            </div>
+          </Form>
+        </Card>
       ) : (
-        <>
+        <Card className="p-4">
           <h2>{post.title}</h2>
-          <p><strong>카테고리:</strong> {post.category}</p>
+          <p className="text-muted mb-1"><strong>카테고리:</strong> {post.category}</p>
           <p>{post.content}</p>
-          <p><em>작성자: {post.userId.name}</em></p>
-          <button onClick={() => setEditMode(true)}>수정</button>
-          <button onClick={handleDelete}>삭제</button>
-        </>
+          <p className="text-end text-secondary"><em>작성자: {post.userId.name}</em></p>
+          <div className="d-flex justify-content-end gap-2">
+            <Button variant="outline-primary" onClick={() => setEditMode(true)}>
+              수정
+            </Button>
+            <Button variant="outline-danger" onClick={handleDelete}>
+              삭제
+            </Button>
+          </div>
+        </Card>
       )}
 
-      <hr />
+      <hr className="my-5" />
+
       <CommentList postId={postId} />
-    </div>
+    </Container>
   );
 }
 
