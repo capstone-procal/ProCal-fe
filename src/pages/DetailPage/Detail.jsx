@@ -14,28 +14,28 @@ const Detail = () => {
   const [reviewReviews, setReviewReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
+  const fetchCertificate = async () => {
+    try {
+      const res = await api.get(`/certificate/${id}`);
+      setCertificate(res.data.certificate);
+
+      // 후기/팁 가져오기
+      const reviewRes = await api.get(`/review/${id}`);
+      const allReviews = reviewRes.data.reviews || [];
+      const tips = allReviews.filter(r => r.category === "tip");
+      const reviews = allReviews.filter(r => r.category === "review");
+      setTipReviews(tips);
+      setReviewReviews(reviews);
+
+    } catch (err) {
+      console.error('상세 정보 가져오기 실패:', err);
+      setError('자격증 정보를 불러올 수 없습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchCertificate = async () => {
-      try {
-        const res = await api.get(`/certificate/${id}`);
-        setCertificate(res.data.certificate);
-
-        // 후기/팁 가져오기
-        const reviewRes = await api.get(`/certificate/${id}`);
-        const allReviews = reviewRes.data.reviews || [];
-        const tips = allReviews.filter(r => r.category === "TIP");
-        const reviews = allReviews.filter(r => r.category === "후기");
-        setTipReviews(tips);
-        setReviewReviews(reviews);
-
-      } catch (err) {
-        console.error('상세 정보 가져오기 실패:', err);
-        setError('자격증 정보를 불러올 수 없습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCertificate();
   }, [id]);
 
@@ -96,8 +96,9 @@ const Detail = () => {
             show={showModal}
             onClose={() => setShowModal(false)}
             certificateId={id}
-            onSuccess={() => {
+            onSuccess={async() => {
               alert('작성 완료!');
+              await fetchCertificate();
             }}
           />
         </div>
