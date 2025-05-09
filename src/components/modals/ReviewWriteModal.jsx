@@ -3,21 +3,29 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import api from '../../utils/api';
 
 const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
-  const [category, setCategory] = useState('후기');
+  const [category, setCategory] = useState('review');
   const [content, setContent] = useState('');
   const [difficulty, setDifficulty] = useState(3);
 
   const handleSubmit = async () => {
-    try {
-      const body = {
-        certificateId,
-        category,
-        content,
-        difficulty: category === '후기' ? difficulty : undefined,
-      };
+    const body = {
+      certificateId,
+      category,
+      content,
+      difficulty,
+    };
 
-      await api.post('/review', body);
-      onSuccess?.(); // 성공 콜백
+    console.log("보낼 body:", body);
+
+    try {
+      console.log("🔥 최종 보낼 body", JSON.stringify(body, null, 2));
+      
+      await api.post('/review', body, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });      
+      onSuccess?.();
       onClose();
     } catch (err) {
       console.error('리뷰 등록 실패:', err);
@@ -35,12 +43,12 @@ const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
           <Form.Group controlId="reviewCategory" className="mb-3">
             <Form.Label>구분</Form.Label>
             <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="후기">후기</option>
-              <option value="TIP">TIP</option>
+              <option value="review">후기</option>
+              <option value="tip">TIP</option>
             </Form.Select>
           </Form.Group>
 
-          {category === '후기' && (
+         
             <Form.Group controlId="difficulty" className="mb-3">
               <Form.Label>난이도 (1~5)</Form.Label>
               <Form.Control
@@ -51,7 +59,7 @@ const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
                 onChange={(e) => setDifficulty(Number(e.target.value))}
               />
             </Form.Group>
-          )}
+    
 
           <Form.Group controlId="reviewContent" className="mb-3">
             <Form.Label>내용</Form.Label>
