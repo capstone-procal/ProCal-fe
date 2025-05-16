@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import api from '../../utils/api';
 
-const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
+const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess, editingReview }) => {
   const [category, setCategory] = useState('review');
   const [content, setContent] = useState('');
   const [difficulty, setDifficulty] = useState(3);
+
+  useEffect(() => {
+    if (editingReview) {
+      setCategory(editingReview.category);
+      setContent(editingReview.content);
+      setDifficulty(editingReview.difficulty);
+    } else {
+      setCategory('review');
+      setContent('');
+      setDifficulty(3);
+    }
+  }, [editingReview, show]);
 
   const handleSubmit = async () => {
     const body = {
@@ -18,13 +30,11 @@ const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
     console.log("보낼 body:", body);
 
     try {
-      console.log("🔥 최종 보낼 body", JSON.stringify(body, null, 2));
-      
-      await api.post('/review', body, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });      
+      if (editingReview) {
+        await api.put(`/review/${editingReview._id}`, body);
+      } else {
+        await api.post('/review', body);
+      }
       onSuccess?.();
       onClose();
     } catch (err) {
@@ -74,8 +84,9 @@ const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>취소</Button>
-        <Button variant="primary" onClick={handleSubmit}>등록</Button>
+      <Button variant="primary" onClick={handleSubmit}>
+        {editingReview ? '수정' : '등록'}
+      </Button>
       </Modal.Footer>
     </Modal>
   );
