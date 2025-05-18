@@ -4,6 +4,7 @@ import { Tab, Tabs, Button } from 'react-bootstrap';
 import api from '../../utils/api'; 
 import ReviewWriteModal from '../../components/modals/ReviewWriteModal'; 
 
+
 const Detail = () => {
   const { id } = useParams(); 
   const [certificate, setCertificate] = useState(null);
@@ -13,6 +14,8 @@ const Detail = () => {
   const [tipReviews, setTipReviews] = useState([]);
   const [reviewReviews, setReviewReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
+
 
   const fetchCertificate = async () => {
     try {
@@ -34,6 +37,27 @@ const Detail = () => {
       setLoading(false);
     }
   };
+
+  const handleDelete = async (reviewId) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+  
+    try {
+      await api.delete(`/review/${reviewId}`);
+      alert('삭제 완료!');
+      await fetchCertificate(); 
+    } catch (err) {
+      console.error('삭제 실패:', err);
+      alert('삭제에 실패했습니다.');
+    }
+  };
+
+  const handleEdit = (review) => {
+    setEditingReview(review);
+    setShowModal(true);
+  };  
+
+  const token = sessionStorage.getItem('token');//localStorage로 통일 할지 sessionStorage로 통일할지 의논 필요
+  const isLoggedIn = !!token;
 
   useEffect(() => {
     fetchCertificate();
@@ -63,6 +87,28 @@ const Detail = () => {
                   <p><strong>작성자:</strong> {review.userId.name}</p>
                   <p><strong>내용:</strong> {review.content}</p>
                   <p><strong>난이도:</strong> {review.difficulty} / 5</p>
+
+                  {/* 수정/삭제 버튼 */}
+                  <div className="mt-2 d-flex gap-2">
+                  <Button size="sm" variant="outline-secondary" onClick={() => {
+                      const token = sessionStorage.getItem('token');
+                      if (!token) {
+                        alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");
+                        return;
+                      }
+                      handleEdit(review)}}>
+                      수정
+                  </Button>
+                  <Button size="sm" variant="outline-secondary" onClick={() => {
+                      const token = sessionStorage.getItem('token');
+                      if (!token) {
+                        alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");
+                        return;
+                      }
+                      handleDelete(review._id)}}>
+                      삭제
+                  </Button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -76,6 +122,28 @@ const Detail = () => {
                 <div key={idx} className="border-b border-gray-300 py-2">
                   <p><strong>작성자:</strong> {review.userId.name}</p>
                   <p><strong>내용:</strong> {review.content}</p>
+
+                  {/* 수정/삭제 버튼 */}
+                  <div className="mt-2 d-flex gap-2">
+                    <Button size="sm" variant="outline-secondary" onClick={() => {
+                      const token = sessionStorage.getItem('token');
+                      if (!token) {
+                        alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");
+                        return;
+                      }
+                      handleEdit(review)}}>
+                      수정
+                    </Button>
+                    <Button size="sm" variant="outline-secondary" onClick={() => {
+                      const token = sessionStorage.getItem('token');
+                      if (!token) {
+                        alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");
+                        return;
+                      }
+                      handleDelete(review._id)}}>
+                      삭제
+                    </Button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -88,16 +156,28 @@ const Detail = () => {
       {/* 후기/TIP 작성 버튼 */}
       <div className="mt-5">
         <div className="d-flex gap-3">
-          <Button variant="primary" onClick={() => setShowModal(true)}>
+          <Button variant="primary" onClick={() => {
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+              alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");
+              return;
+            }
+            setShowModal(true);
+          }}>
             작성하기
           </Button>
 
           <ReviewWriteModal
             show={showModal}
-            onClose={() => setShowModal(false)}
+            onClose={() => {
+              setShowModal(false)
+              setEditingReview(null);
+            }}
             certificateId={id}
+            editingReview={editingReview}
             onSuccess={async() => {
               alert('작성 완료!');
+              setEditingReview(null);
               await fetchCertificate();
             }}
           />
