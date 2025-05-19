@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
-import CertificationFormModal from './components/CertificationFormModal'; 
+import CertificationFormModal from '../../components/modals/CertificationFormModal';
 
 const ITEMS_PER_PAGE = 4;
 
