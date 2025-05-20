@@ -1,9 +1,9 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
-function MarketCard({ item }) {
+function MarketCard({ item, onClick }) {
   return (
-    <Card className="h-100">
+    <Card className="h-100" onClick={onClick}>
       {item.image ? (
         <Card.Img variant="top" src={item.image} alt={item.title} style={{ height: '180px', objectFit: 'cover' }} />
       ) : (
