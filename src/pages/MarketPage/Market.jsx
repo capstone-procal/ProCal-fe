@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import api from "../../utils/api";
 import MarketCard from "./component/MarketCard";
 import MarketWriteModal from "./component/MarketWriteModal";
+import MarketDetailModal from "../../components/modals/MarketDetailModal";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 function Market() {
   const [items, setItems] = useState([]);
   const [showWriteModal, setShowWriteModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+
 
   useEffect(() => {
     api.get("/market")
@@ -17,6 +21,11 @@ function Market() {
   const handleItemCreated = (newItem) => {
     setItems((prev) => [newItem, ...prev]);
     setShowWriteModal(false);
+  };
+
+  const handleCardClick = (item) => {
+    setSelectedItem(item);
+    setShowDetailModal(true);
   };
 
   return (
@@ -31,7 +40,7 @@ function Market() {
       <Row>
         {items.map((item) => (
           <Col key={item._id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-            <MarketCard item={item} />
+            <MarketCard item={item} onClick={() => handleCardClick(item)}/>
           </Col>
         ))}
       </Row>
@@ -40,6 +49,12 @@ function Market() {
         show={showWriteModal}
         onClose={() => setShowWriteModal(false)}
         onItemCreated={handleItemCreated}
+      />
+
+      <MarketDetailModal
+        show={showDetailModal}
+        onHide={() => setShowDetailModal(false)}
+        item={selectedItem}
       />
     </Container>
   );
