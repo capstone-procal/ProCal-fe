@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import api from '../../../utils/api';
+import api from '../../utils/api';
 
 const CertificationFormModal = ({ show, onClose, onSaved, initialData }) => {
   const [name, setName] = useState('');
