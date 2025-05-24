@@ -1,17 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import api from "../../utils/api"
+import api from "../../utils/api";
 import { Link } from 'react-router-dom';
 
-const EventDetailModal = ({ selectedEvent, onClose, onBookmark, isBookmarked }) => {
+const EventDetailModal = ({ selectedEvent, onClose }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [reminderId, setReminderId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 모달이 열릴 때 해당 자격증 리뷰 가져오기
   useEffect(() => {
     if (!selectedEvent) return;
+
+    const checkBookmark = async () => {
+      try {
+        const res = await api.get('/reminder');
+        const match = res.data.reminders.find(
+          (r) => r.certificateId._id === selectedEvent.extendedProps.certificateId
+        );
+        if (match) {
+          setIsBookmarked(true);
+          setReminderId(match._id);
+        } else {
+          setIsBookmarked(false);
+          setReminderId(null);
+        }
+      } catch (err) {
+        console.error('찜 여부 확인 실패:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkBookmark();
   }, [selectedEvent]);
 
-  if (!selectedEvent) return null;
+  const handleBookmarkToggle = async () => {
+    if (!selectedEvent) return;
+
+    try {
+      if (isBookmarked && reminderId) {
+        await api.delete(`/reminder/${reminderId}`);
+        setIsBookmarked(false);
+        setReminderId(null);
+      } else {
+        const res = await api.post('/reminder', {
+          certificateId: selectedEvent.extendedProps.certificateId,
+        });
+        setIsBookmarked(true);
+        setReminderId(res.data.reminder._id);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || '찜하기/해제 실패');
+    }
+  };
+
+  if (!selectedEvent || loading) return null;
 
   return (
     <Modal show={true} onHide={onClose} size="lg">
@@ -20,7 +63,6 @@ const EventDetailModal = ({ selectedEvent, onClose, onBookmark, isBookmarked }) 
       </Modal.Header>
 
       <Modal.Body>
-        {/* 자격증 기본 정보 */}
         <div style={{ marginBottom: '20px' }}>
           <p><strong>🗓️ 시험일자:</strong> {selectedEvent.start}</p>
           <p><strong>🎯 라운드:</strong> {selectedEvent.extendedProps.round}</p>
@@ -31,25 +73,20 @@ const EventDetailModal = ({ selectedEvent, onClose, onBookmark, isBookmarked }) 
           </a>
         </div>
 
-        {/* 찜하기 버튼 */}
         <div style={{ marginBottom: '20px' }}>
-          <Button variant={isBookmarked ? "danger" : "primary"} onClick={onBookmark}>
+          <Button variant={isBookmarked ? "danger" : "primary"} onClick={handleBookmarkToggle}>
             {isBookmarked ? "찜 해제" : "찜하기"}
           </Button>
         </div>
       </Modal.Body>
 
       <Modal.Footer>
-        {/* 상세페이지 이동 버튼 */}
         <Link to={`/certificate/${selectedEvent.extendedProps.certificateId}`}>
           <Button variant="info" onClick={onClose} style={{ marginRight: '10px' }}>
             상세페이지 보기
           </Button>
         </Link>
-
-        <Button variant="secondary" onClick={onClose}>
-          닫기
-        </Button>
+        <Button variant="secondary" onClick={onClose}>닫기</Button>
       </Modal.Footer>
     </Modal>
   );
