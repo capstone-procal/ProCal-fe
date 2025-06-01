@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
-import { Container, Row, Col, Card, Image, Button, ListGroup, Dropdown } from 'react-bootstrap';
+import {
+  Container, Row, Col, Card, Image, Button,
+  ListGroup, Dropdown
+} from 'react-bootstrap';
 import EditProfileModal from './components/EditProfileModal';
+import "./css/MyPage.css"
 
 const AVAILABLE_COLORS = ['#54b5e2', '#eeb5ec', '#fa7f12', '#f6e705', '#1aba25'];
 
@@ -66,117 +70,114 @@ const MyPage = () => {
   if (!userInfo) return <Container className="py-5">로딩 중...</Container>;
 
   return (
-    <Container className="py-4">
-      <Card className="text-white bg-secondary mb-4 text-center">
-        <Card.Body>
-          <Card.Title>{userInfo.name}님의 마이페이지</Card.Title>
-        </Card.Body>
-      </Card>
+    <>
+      <div className="mypage-header">
+        <h2>{userInfo.name}님의 마이페이지</h2>
+      </div>
 
-      <Row className="mb-4">
-        <Col md={4} className="text-center">
-          <Image
-            src={userInfo.profileImage || '/default-profile.png'}
-            roundedCircle
-            fluid
-            style={{ width: '120px', height: '120px', objectFit: 'cover' }}
-          />
-        </Col>
-        <Col md={8}>
-          <Card>
-            <Card.Body>
-              <Card.Title>
-                회원정보
-                <Button variant="link" onClick={() => setEditModalOpen(true)}>
-                  수정
-                </Button>
-              </Card.Title>
-              <Card.Text>
-                <strong>이름</strong>: {userInfo.name}
-              </Card.Text>
-              <Card.Text>
-                <strong>닉네임</strong>: {userInfo.nickname}
-              </Card.Text>
-              <Card.Text>
-                <strong>이메일</strong>: {userInfo.email}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-      <Card>
-        <Card.Header>나의 시험</Card.Header>
-        <ListGroup variant="flush">
-          {myExams.length > 0 ? (
-            myExams.map((exam) => (
-              <ListGroup.Item
-                key={exam.reminderId}
-                style={{
-                  backgroundColor: exam.color,
-                  fontWeight: 'bold',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <span>{exam.name} - {getDday(exam.date)}</span>
-                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="outline-dark"
-                      size="sm"
-                      style={{
-                        backgroundColor: exam.color,
-                        color: 'black',
-                        borderColor: 'gray',
-                      }}
-                    >
-                      색상
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {AVAILABLE_COLORS.map((color) => (
-                        <Dropdown.Item
-                          key={color}
-                          onClick={() => handleColorChange(exam.reminderId, color)}
-                          active={exam.color === color}
-                        >
-                          <div
-                            style={{
-                              backgroundColor: color,
-                              height: '20px',
-                              borderRadius: '4px',
-                              border: exam.color === color ? '2px solid #000' : '1px solid #ccc',
-                            }}
-                            title={`색상: ${color}`}
-                          />
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => handleDelete(exam.reminderId)}
-                  >
-                    삭제
+      <Container className="py-4">
+        <Row className="mb-4">
+          <Col
+  md={4}
+  className="d-flex flex-column justify-content-center align-items-center">
+ 
+            <Image
+              src={userInfo.profileImage || '/default-profile.png'}
+              roundedCircle
+              fluid
+              style={{ width: '120px', height: '120px', objectFit: 'cover' }}
+            />
+          </Col>
+          <Col md={8}>
+            <Card className='border-0'> 
+              <Card.Body>
+                <Card.Title className="d-flex justify-content-between align-items-center">
+                  <span>회원정보</span>
+                  <Button variant="link" onClick={() => setEditModalOpen(true)}>
+                    수정
                   </Button>
-                </div>
-              </ListGroup.Item>
-            ))
-          ) : (
-            <ListGroup.Item>등록된 시험이 없습니다.</ListGroup.Item>
-          )}
-        </ListGroup>
-      </Card>
+                </Card.Title>
+                <Card.Text><strong>이름</strong>: {userInfo.name}</Card.Text>
+                <Card.Text><strong>닉네임</strong>: {userInfo.nickname}</Card.Text>
+                <Card.Text><strong>이메일</strong>: {userInfo.email}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-      <EditProfileModal
-        show={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        userInfo={userInfo}
-        onUpdate={fetchData}
-      />
-    </Container>
+        <Card>
+          <Card.Header>나의 시험</Card.Header>
+          <ListGroup variant="flush">
+            {myExams.length > 0 ? (
+              myExams.map((exam) => (
+                <ListGroup.Item
+                  key={exam.reminderId}
+                  style={{
+                    backgroundColor: 'white',
+                    fontWeight: 'bold',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span>{exam.name} - {getDday(exam.date)}</span>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="outline-dark"
+                        size="sm"
+                        style={{
+                          backgroundColor: exam.color,
+                          color: 'black',
+                          border: 'none',
+                          borderRadius: '50px'
+                        }}
+                      >color 
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {AVAILABLE_COLORS.map((color) => (
+                          <Dropdown.Item
+                            key={color}
+                            onClick={() => handleColorChange(exam.reminderId, color)}
+                            active={exam.color === color}
+                          >
+                            <div
+                              style={{
+                                backgroundColor: color,
+                                height: '20px',
+                                borderRadius: '4px',
+                                border: exam.color === color ? '2px solid #000' : '1px solid #ccc',
+                              }}
+                              title={`색상: ${color}`}
+                            />
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(exam.reminderId)}
+                    >
+                      삭제
+                    </Button>
+                  </div>
+                </ListGroup.Item>
+              ))
+            ) : (
+              <ListGroup.Item>등록된 시험이 없습니다.</ListGroup.Item>
+            )}
+          </ListGroup>
+        </Card>
+
+        <EditProfileModal
+          show={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          userInfo={userInfo}
+          onUpdate={fetchData}
+        />
+      </Container>
+    </>
   );
 };
 
