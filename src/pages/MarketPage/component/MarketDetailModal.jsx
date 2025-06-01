@@ -14,8 +14,8 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
       try {
         await api.delete(`/market/${item._id}`);
         alert("삭제되었습니다.");
-        onDelete?.();  // 부모 컴포넌트에서 리스트 갱신
-        onHide();      // 모달 닫기
+        onDelete?.();  
+        onHide();     
       } catch (err) {
         console.error("삭제 실패:", err);
         alert("삭제 중 오류가 발생했습니다.");
