@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-import api from '../../utils/api'; 
+import api from '../../utils/api';
 
 function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [emailError, setEmailError] = useState('');
+
+  useEffect(() => {
+    if (show) {
+      setEmail('');
+      setPassword('');
+      setErrorMessage('');
+      setEmailError('');
+    }
+  }, [show]);
 
   const validateEmail = (inputEmail) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,20 +42,20 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
       const { token, userId, userEmail, role } = response.data;
 
       sessionStorage.setItem('token', token);
-      sessionStorage.setItem('userId', userId);  
+      sessionStorage.setItem('userId', userId);
       sessionStorage.setItem('userEmail', userEmail);
-      sessionStorage.setItem('userRole', role); 
+      sessionStorage.setItem('userRole', role);
 
       console.log('로그인 성공:', { token, userId, role });
 
       setErrorMessage('');
       onClose();
-      onLoginSuccess(role); 
+      onLoginSuccess(role);
     } catch (error) {
       console.error('로그인 실패:', error);
       setErrorMessage(
-        error.response?.data?.error || 
-        error.message || 
+        error.response?.data?.error ||
+        error.message ||
         '로그인 실패'
       );
     }
@@ -90,17 +99,17 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
               placeholder="비밀번호 입력"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown} 
+              onKeyDown={handleKeyDown}
             />
           </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button 
-          variant="primary" 
+        <Button
+          variant="primary"
           onClick={handleLogin}
-          disabled={!email || !password || !!emailError} 
+          disabled={!email || !password || !!emailError}
         >
           Login
         </Button>

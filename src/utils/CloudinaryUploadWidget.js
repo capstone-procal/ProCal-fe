@@ -1,45 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
 
 const CLOUDNAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const UPLOADPRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
 
 const CloudinaryUploadWidget = ({ uploadImage }) => {
+  const widgetRef = useRef(null);
+
   useEffect(() => {
     if (!window.cloudinary) {
       console.error("Cloudinary 스크립트가 로드되지 않았습니다.");
       return;
     }
 
-    const myWidget = window.cloudinary.createUploadWidget(
+    widgetRef.current = window.cloudinary.createUploadWidget(
       {
         cloudName: CLOUDNAME,
         uploadPreset: UPLOADPRESET,
+        sources: ["local", "url", "camera"],
+        multiple: false,
+        maxFiles: 1,
+        folder: "market",
       },
       (error, result) => {
         if (!error && result && result.event === "success") {
-          console.log("업로드 완료:", result.info.secure_url);
+          console.log("업로드 성공:", result.info.secure_url);
           uploadImage(result.info.secure_url);
-          myWidget.close();
         }
       }
     );
-
-    const uploadButton = document.getElementById("upload_widget");
-    if (uploadButton) {
-      uploadButton.addEventListener("click", () => myWidget.open(), false);
-    }
-
-    return () => {
-      if (uploadButton) {
-        uploadButton.removeEventListener("click", () => myWidget.open());
-      }
-    };
   }, [uploadImage]);
 
+  const handleClick = () => {
+    if (widgetRef.current) {
+      widgetRef.current.open();
+    }
+  };
+
   return (
-    <Button id="upload_widget" size="sm" className="ml-2">
-      Upload Image +
+    <Button onClick={handleClick} size="sm" variant="outline-primary">
+      + 이미지 업로드
     </Button>
   );
 };

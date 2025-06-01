@@ -1,0 +1,94 @@
+import React from "react";
+import { Modal, Image, Row, Col, Carousel, Button } from "react-bootstrap";
+import api from "../../../utils/api";
+
+function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onDelete }) {
+  if (!item) return null;
+
+  const images = item.images?.length ? item.images : ["/default-image.png"];
+  const user = item.userId || {};
+  const isOwner = currentUserId && user._id === currentUserId;
+
+  const handleDelete = async () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      try {
+        await api.delete(`/market/${item._id}`);
+        alert("삭제되었습니다.");
+        onDelete?.();  // 부모 컴포넌트에서 리스트 갱신
+        onHide();      // 모달 닫기
+      } catch (err) {
+        console.error("삭제 실패:", err);
+        alert("삭제 중 오류가 발생했습니다.");
+      }
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={onHide} centered size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>{item.title}</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Carousel fade>
+              {images.map((url, idx) => (
+                <Carousel.Item key={idx}>
+                  <Image
+                    src={url}
+                    alt={`image-${idx}`}
+                    fluid
+                    rounded
+                    style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          </Col>
+
+          <Col md={6}>
+            <div className="d-flex align-items-center mb-3">
+              <Image
+                src={user.profileImage || "/default-profile.png"}
+                roundedCircle
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  objectFit: "cover",
+                  marginRight: "10px",
+                }}
+              />
+              <strong>{user.nickname || "익명 사용자"}</strong>
+            </div>
+
+            <p><strong>설명:</strong> {item.description}</p>
+            <p><strong>가격:</strong> {item.price.toLocaleString()}원</p>
+            <p><strong>상태:</strong> {item.status}</p>
+
+            <div className="d-flex gap-2 mt-4">
+              <Button
+                variant="primary"
+                onClick={() => alert("채팅 기능은 추후 연결 예정입니다.")}
+              >
+                채팅
+              </Button>
+              {isOwner && (
+                <>
+                  <Button variant="outline-secondary" onClick={onEditClick}>
+                    수정
+                  </Button>
+                  <Button variant="outline-danger" onClick={handleDelete}>
+                    삭제
+                  </Button>
+                </>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Modal.Body>
+    </Modal>
+  );
+}
+
+export default MarketDetailModal;
