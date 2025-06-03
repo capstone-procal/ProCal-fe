@@ -11,7 +11,7 @@ const MainLayout = ({ children, userRole, isLoggedIn, onLogout, onLoginClick }) 
 
       <div className="flex flex-col flex-1">
         <SearchBanner />
-        <main className="flex-1 overflow-y-auto p-4" style={{ marginLeft: '200px' }}>
+        <main className="flex-1 overflow-y-auto p-4">
           {children}
         </main>
       </div>
