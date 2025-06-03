@@ -4,8 +4,8 @@ import {
   Container, Row, Col, Card, Image, Button,
   ListGroup, Dropdown
 } from 'react-bootstrap';
-import EditProfileModal from './components/EditProfileModal';
-import "./css/MyPage.css"
+import EditProfileModal from '../../components/modals/EditProfileModal';
+import "./MyPage.css"
 
 const AVAILABLE_COLORS = ['#54b5e2', '#eeb5ec', '#fa7f12', '#f6e705', '#1aba25'];
 

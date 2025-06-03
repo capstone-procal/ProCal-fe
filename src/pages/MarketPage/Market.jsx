@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../utils/api";
-import MarketCard from "./component/MarketCard";
-import MarketWriteModal from "./component/MarketWriteModal";
+import MarketCard from "../../components/cards/MarketCard";
+import MarketWriteModal from "../../components/modals/MarketWriteModal";
 import MarketDetailModal from "../../components/modals/MarketDetailModal";
 import { Container, Row, Col, Button } from "react-bootstrap";
 

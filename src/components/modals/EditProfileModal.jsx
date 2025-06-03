@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
-import api from '../../../utils/api';
-import "../css/EditProfileModal.css";
-import CloudinaryUploadWidget from '../../../utils/CloudinaryUploadWidget';
+import api from '../../utils/api';
+import './EditProfileModal.css';
+import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
 
 const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
   const [name, setName] = useState('');

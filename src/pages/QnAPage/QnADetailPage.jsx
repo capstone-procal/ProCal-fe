@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
-import CommentList from "./components/CommentList";
+import CommentList from "../../components/lists/CommentList";
 import { Container, Form, Button, Card } from "react-bootstrap";
 
 function QnADetailPage() {
