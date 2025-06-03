@@ -6,6 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import EventDetailModal from '../../components/modals/ExamDetailModal';
 import LoginModal from '../../components/modals/LoginModal';
 import api from '../../utils/api';
+import "./Home.css"
 
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
