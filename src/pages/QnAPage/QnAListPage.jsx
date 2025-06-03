@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../utils/api";
 import { Button } from "react-bootstrap";
-import QnAWriteModal from "./components/QnAWriteModal";
+import QnAWriteModal from "../../components/modals/QnAWriteModal";
 import { useNavigate } from "react-router-dom";
 
 function QnAListPage() {
