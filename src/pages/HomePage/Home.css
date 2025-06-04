@@ -1,0 +1,69 @@
+.fc .fc-day-today {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  background-color: #f44336; 
+  color: white;            
+  border-radius: 50%;      
+  padding: 4px 8px;         
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+}
+
+.fc-event {
+  border-radius: 8px;
+  padding: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.fc-day-sat, .fc-day-sun {
+  background-color: #f3f4f6;
+}
+
+.fc .fc-daygrid-day-number {
+  color: black;
+  text-decoration: none;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: black;
+  text-decoration: none;
+}
+
+.fc .fc-button {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #666 !important;
+  font-weight: normal;
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-radius: 0 !important;
+}
+
+.fc .fc-today-button {
+  font-weight: bold;
+  color: #111;
+}
+
+.fc .fc-prev-button::before,
+.fc .fc-next-button::before {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.fc .fc-prev-button .fc-icon,
+.fc .fc-next-button .fc-icon {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.fc .fc-today-button:disabled {
+  opacity: 1 !important;
+  color: #111 !important;
+  cursor: default;
+}
