@@ -1,0 +1,51 @@
+.commentlist-container {
+  margin-top: 2rem;
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+
+.commentlist-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.commentlist-form {
+  margin-bottom: 1.5rem;
+}
+
+.commentlist-form textarea.form-control {
+  background-color: #f0f0f0; 
+  border: none;
+  border-radius: 10px;
+  color: #000; 
+  resize: none;
+}
+
+.commentlist-form textarea::placeholder {
+  color: #000 !important;
+  opacity: 1; 
+}
+
+.commentlist-submit-btn {
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.commentlist-item {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 12px;
+  border: none;
+}
+
+.commentlist-content {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.commentlist-author {
+  font-size: 0.85rem;
+  color: #777;
+}
