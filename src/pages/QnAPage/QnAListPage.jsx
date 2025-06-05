@@ -3,6 +3,7 @@ import api from "../../utils/api";
 import { Button } from "react-bootstrap";
 import QnAWriteModal from "../../components/modals/QnAWriteModal";
 import { useNavigate } from "react-router-dom";
+import "./QnAListPage.css"
 
 function QnAListPage() {
   const [posts, setPosts] = useState([]);
@@ -23,21 +24,27 @@ function QnAListPage() {
   };
 
   return (
-    <div className="container py-4">
+    <div className="qnalist-container">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Q&A</h2>
-        <Button onClick={() => setShowWriteModal(true)}>✏️ 글쓰기</Button>
+        <h2 className="qnalist-title">Q&A</h2>
+        <Button
+          className="qnalist-write-btn"
+          onClick={() => setShowWriteModal(true)}
+        >
+          ✏️ 글쓰기
+        </Button>
       </div>
 
       {posts.map((post) => (
         <div
           key={post._id}
-          className="mb-3 border-bottom pb-2"
+          className="qnalist-post-item"
           onClick={() => navigate(`/qna/${post._id}`)}
-          style={{ cursor: "pointer" }}
         >
-          <h5 className="mb-1">{post.title}</h5>
-          <small className="text-muted">카테고리: {post.category}</small>
+          <h5 className="qnalist-post-title">{post.title}</h5>
+          <small className="qnalist-post-category">
+            카테고리: {post.category}
+          </small>
         </div>
       ))}
 

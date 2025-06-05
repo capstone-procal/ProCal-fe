@@ -1,0 +1,64 @@
+.qnadetail-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+
+.qnadetail-card {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: none;
+  border: none;
+}
+
+.qnadetail-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.qnadetail-category {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.qnadetail-content {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+.qnadetail-author {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.qnadetail-button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.qnadetail-comment-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.qnadetail-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+hr {
+  display: none;
+}
