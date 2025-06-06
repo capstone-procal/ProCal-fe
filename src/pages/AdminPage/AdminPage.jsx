@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import CertificationFormModal from '../../components/modals/CertificationFormModal';
+import './AdminPage.css';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -41,73 +42,76 @@ const AdminPage = () => {
   );
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">자격증 일정 관리</h2>
+   <div className="admin-container">
+      <div className="admin-card">
+        <h2 className="admin-title">자격증 일정 관리</h2>
 
-      <button
-        onClick={() => {
-          setSelected(null);
-          setShowModal(true);
-        }}
-        className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
-      >
-        새 자격증 일정 등록
-      </button>
+        <button
+          className="admin-register-btn"
+          onClick={() => {
+            setSelected(null);
+            setShowModal(true);
+          }}
+        >
+          새 자격증 일정 등록
+        </button>
 
-      <table className="w-full border text-sm">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">자격증명</th>
-            <th className="p-2 border">수정</th>
-            <th className="p-2 border">삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((cert) => (
-            <tr key={cert._id}>
-              <td className="p-2 border">{cert.name}</td>
-              <td className="p-2 border text-center">
-                <button
-                  onClick={() => {
-                    setSelected(cert);
-                    setShowModal(true);
-                  }}
-                  className="text-blue-600"
-                >
-                  수정
-                </button>
-              </td>
-              <td className="p-2 border text-center">
-                <button onClick={() => handleDelete(cert._id)} className="text-red-600">
-                  삭제
-                </button>
-              </td>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>자격증명</th>
+              <th>수정</th>
+              <th>삭제</th>
             </tr>
+          </thead>
+          <tbody>
+            {currentItems.map((cert) => (
+              <tr key={cert._id}>
+                <td>{cert.name}</td>
+                <td>
+                  <button
+                    className="admin-action-btn"
+                    onClick={() => {
+                      setSelected(cert);
+                      setShowModal(true);
+                    }}
+                  >
+                    수정
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="admin-action-btn"
+                    onClick={() => handleDelete(cert._id)}
+                  >
+                    삭제
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="admin-pagination">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={currentPage === i + 1 ? 'active' : ''}
+            >
+              {i + 1}
+            </button>
           ))}
-        </tbody>
-      </table>
+        </div>
 
-      <div className="mt-4 flex justify-center gap-2">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded border ${
-              currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-white'
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+        <CertificationFormModal
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          onSaved={fetchCertifications}
+          initialData={selected}
+        />
       </div>
-
-      <CertificationFormModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        onSaved={fetchCertifications}
-        initialData={selected}
-      />
-    </div>
+   </div>
   );
 };
 

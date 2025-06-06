@@ -4,6 +4,7 @@ import MarketCard from "../../components/cards/MarketCard";
 import MarketWriteModal from "../../components/modals/MarketWriteModal";
 import MarketDetailModal from "../../components/modals/MarketDetailModal";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import "./Market.css"
 
 function Market() {
   const [items, setItems] = useState([]);
@@ -32,7 +33,7 @@ function Market() {
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="fw-bold">Market</h1>
-        <Button variant="outline-secondary" onClick={() => setShowWriteModal(true)}>
+        <Button className="market-write-btn" onClick={() => setShowWriteModal(true)}>
           ✏️ 글쓰기
         </Button>
       </div>

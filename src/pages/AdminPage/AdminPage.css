@@ -1,0 +1,93 @@
+.admin-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+  color: #000;
+}
+
+.admin-card {
+  padding: 32px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.admin-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.admin-register-btn {
+  display: block;
+  margin: 0 auto 24px auto;
+  background-color: #9b9b9b;
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  text-align: center;
+}
+
+.admin-table thead {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.admin-table tbody tr {
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-action-btn {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 12px;
+  color: #000;
+  cursor: pointer;
+}
+
+.admin-action-btn:hover {
+  background-color: #ddd;
+}
+
+.admin-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.admin-pagination button {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: none;
+  background-color: #f0f0f0;
+  color: #000;
+  cursor: pointer;
+}
+
+.admin-pagination button.active {
+  background-color: #9b9b9b;
+  color: white;
+}
+
