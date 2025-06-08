@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
+
 import Home from "./pages/HomePage/Home";
 import Detail from "./pages/DetailPage/Detail";
 import MyPage from "./pages/MyPage/MyPage";
@@ -9,8 +10,10 @@ import QnADetailPage from "./pages/QnAPage/QnADetailPage";
 import Market from "./pages/MarketPage/Market";
 import Chat from "./pages/ChatPage/Chat";
 import AdminPage from "./pages/AdminPage/AdminPage";
+
 import LoginModal from "./components/modals/LoginModal";
 import SignupModal from "./components/modals/SignupModal";
+
 import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 
@@ -90,17 +93,6 @@ function App() {
           }
         />
         <Route
-          path="/qna/:postId"
-          element={
-            <PrivateRoute
-              isLoggedIn={isLoggedIn}
-              onRequireLogin={handleRequireLogin}
-            >
-              <QnADetailPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/market"
           element={
             <PrivateRoute
@@ -113,6 +105,17 @@ function App() {
         />
         <Route
           path="/chat"
+          element={
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={handleRequireLogin}
+            >
+              <Chat />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/chat/:roomId"
           element={
             <PrivateRoute
               isLoggedIn={isLoggedIn}

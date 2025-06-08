@@ -1,8 +1,11 @@
 import React from "react";
 import { Modal, Image, Row, Col, Carousel, Button } from "react-bootstrap";
 import api from "../../../utils/api";
+import { useNavigate } from "react-router-dom"; 
 
 function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onDelete }) {
+  const navigate = useNavigate();
+
   if (!item) return null;
 
   const images = item.images?.length ? item.images : ["/default-image.png"];
@@ -14,12 +17,27 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
       try {
         await api.delete(`/market/${item._id}`);
         alert("삭제되었습니다.");
-        onDelete?.();  
-        onHide();     
+        onDelete?.();
+        onHide();
       } catch (err) {
         console.error("삭제 실패:", err);
         alert("삭제 중 오류가 발생했습니다.");
       }
+    }
+  };
+
+  const handleChat = async () => {
+    try {
+      const res = await api.post("/chat/room", {
+        opponentId: user._id,
+        marketId: item._id,
+      });
+
+      const roomId = res.data.room._id;
+      navigate(`/chat/${roomId}`); 
+    } catch (err) {
+      console.error("채팅방 생성 실패:", err);
+      alert("채팅 시작에 실패했습니다.");
     }
   };
 
@@ -67,12 +85,11 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
             <p><strong>상태:</strong> {item.status}</p>
 
             <div className="d-flex gap-2 mt-4">
-              <Button
-                variant="primary"
-                onClick={() => alert("채팅 기능은 추후 연결 예정입니다.")}
-              >
-                채팅
-              </Button>
+              {!isOwner && (
+                <Button variant="primary" onClick={handleChat}>
+                  채팅
+                </Button>
+              )}
               {isOwner && (
                 <>
                   <Button variant="outline-secondary" onClick={onEditClick}>
