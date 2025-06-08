@@ -2,13 +2,22 @@ import React from "react";
 import { Card } from "react-bootstrap";
 
 function MarketCard({ item, onClick }) {
+  const imageSrc = Array.isArray(item.images) && item.images.length > 0
+    ? item.images[0]
+    : "/default-image.png";
+
+  const priceText = typeof item.price === "number"
+    ? `${item.price.toLocaleString()}원`
+    : "가격 미정";
+
   return (
     <Card className="h-100" onClick={onClick}>
-      {item.image ? (
-        <Card.Img variant="top" src={item.image} alt={item.title} style={{ height: '180px', objectFit: 'cover' }} />
-      ) : (
-        <div style={{ height: '180px', backgroundColor: '#e0e0e0' }} />
-      )}
+      <Card.Img
+        variant="top"
+        src={imageSrc}
+        alt={item.title}
+        style={{ height: '180px', objectFit: 'cover' }}
+      />
 
       <Card.Body>
         <Card.Title>{item.title}</Card.Title>
@@ -16,7 +25,7 @@ function MarketCard({ item, onClick }) {
       </Card.Body>
 
       <Card.Footer>
-        <small className="text-muted">{item.status}</small>
+        <small className="text-muted">{item.status} · {priceText}</small>
       </Card.Footer>
     </Card>
   );
