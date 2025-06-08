@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 
 function MarketCard({ item, onClick }) {
@@ -11,11 +11,10 @@ function MarketCard({ item, onClick }) {
       )}
 
       <Card.Body>
-        <Card.Title className="mb-1">{item.title}</Card.Title>
-        <Card.Text className="fw-semibold mb-2">
-          {item.price.toLocaleString()}원
-        </Card.Text>
+        <Card.Title>{item.title}</Card.Title>
+        <Card.Text className="text-truncate">{item.description}</Card.Text>
       </Card.Body>
+
       <Card.Footer>
         <small className="text-muted">{item.status}</small>
       </Card.Footer>
