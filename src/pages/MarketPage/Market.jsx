@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import MarketCard from "./component/MarketCard";
-import MarketWriteModal from "./component/MarketWriteModal";
-import MarketDetailModal from "./component/MarketDetailModal";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Dropdown,
-  ButtonGroup,
-} from "react-bootstrap";
+import MarketCard from "../../components/cards/MarketCard";
+import MarketWriteModal from "../../components/modals/MarketWriteModal";
+import MarketDetailModal from "../../components/modals/MarketDetailModal";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import "./Market.css"
 
 function Market() {
   const [items, setItems] = useState([]);

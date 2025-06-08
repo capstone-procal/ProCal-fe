@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import api from "../../../utils/api";
+import api from "../../utils/api";
 
 function QnAWriteModal({ show, onClose, onPostCreated }) {
   const [title, setTitle] = useState("");

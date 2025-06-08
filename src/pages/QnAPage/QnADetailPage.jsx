@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
-import CommentList from "./components/CommentList";
+import CommentList from "../../components/lists/CommentList";
 import { Container, Form, Button, Card } from "react-bootstrap";
+import "./QnADetailPage.css"
 
 function QnADetailPage() {
   const { postId } = useParams();
@@ -94,12 +95,16 @@ function QnADetailPage() {
           </Form>
         </Card>
       ) : (
-        <Card className="p-4">
-          <h2>{post.title}</h2>
-          <p className="text-muted mb-1"><strong>카테고리:</strong> {post.category}</p>
-          <p>{post.content}</p>
-          <p className="text-end text-secondary"><em>작성자: {post.userId.name}</em></p>
-          <div className="d-flex justify-content-end gap-2">
+        <Card className="qnadetail-card">
+          <h2 className="qnadetail-title">{post.title}</h2>
+          <p className="qnadetail-category">
+            <strong>카테고리:</strong> {post.category}
+          </p>
+          <p className="qnadetail-content">{post.content}</p>
+          <p className="qnadetail-author">
+            <em>작성자: {post.userId.name}</em>
+          </p>
+          <div className="qnadetail-button-group">
             <Button variant="outline-primary" onClick={() => setEditMode(true)}>
               수정
             </Button>

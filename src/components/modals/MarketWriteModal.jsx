@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
-import api from "../../../utils/api";
-import CloudinaryUploadWidget from "../../../utils/CloudinaryUploadWidget";
+import api from "../../utils/api";
+import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 
 function MarketWriteModal({ show, onClose, onItemCreated, onItemUpdated, isEdit = false, item = null }) {
   const [title, setTitle] = useState("");

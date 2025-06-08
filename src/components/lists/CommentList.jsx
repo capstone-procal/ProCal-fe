@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import api from "../../../utils/api";
+import api from "../../utils/api";
 import { Form, Button, ListGroup } from "react-bootstrap";
+import "./CommentList.css"
 
 function CommentList({ postId }) {
   const [comments, setComments] = useState([]);
@@ -34,10 +35,10 @@ function CommentList({ postId }) {
   };
 
   return (
-    <div className="mt-4">
-      <h5>댓글</h5>
+    <div className="commentlist-container">
+      <h5 className="commentlist-title">댓글</h5>
 
-      <Form className="mb-3">
+      <Form className="commentlist-form">
         <Form.Control
           as="textarea"
           rows={2}
@@ -45,8 +46,8 @@ function CommentList({ postId }) {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <div className="text-end mt-2">
-          <Button size="sm" variant="primary" onClick={handleCommentSubmit}>
+        <div className="commentlist-submit-btn">
+          <Button size="sm" onClick={handleCommentSubmit}>
             등록
           </Button>
         </div>
@@ -54,9 +55,9 @@ function CommentList({ postId }) {
 
       <ListGroup>
         {comments.map((comment) => (
-          <ListGroup.Item key={comment._id}>
-            <div>{comment.content}</div>
-            <small className="text-muted">작성자: {comment.userId?.name || "익명"}</small>
+          <ListGroup.Item key={comment._id} className="commentlist-item">
+            <div className="commentlist-content">{comment.content}</div>
+            <small className="commentlist-author">작성자: {comment.userId?.name || "익명"}</small>
           </ListGroup.Item>
         ))}
       </ListGroup>
