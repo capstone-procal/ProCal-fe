@@ -1,39 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
 import api from "../../utils/api";
 import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 
-function MarketWriteModal({ show, onClose, onItemCreated }) {
+function MarketWriteModal({ show, onClose, onItemCreated, onItemUpdated, isEdit = false, item = null }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
+  const [status, setStatus] = useState("판매중");
+  const [images, setImages] = useState([]);
 
-  const handleSubmit = async () => {
-    try {
-      const res = await api.post("/market", {
-        title,
-        description,
-        price,
-        image,
-      });
-
-      onItemCreated(res.data.item);
-
+  useEffect(() => {
+    if (isEdit && item) {
+      setTitle(item.title);
+      setDescription(item.description);
+      setPrice(item.price);
+      setImages(item.images || []);
+      setStatus(item.status || "판매중");
+    } else {
       setTitle("");
       setDescription("");
       setPrice("");
-      setImage("");
+      setImages([]);
+      setStatus("판매중");
+    }
+  }, [item, isEdit, show]);
+
+  const handleImageUpload = (url) => {
+    setImages((prev) => [...prev, url]);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (isEdit) {
+        const res = await api.put(`/market/${item._id}`, {
+          title,
+          description,
+          price,
+          images,
+          status
+        });
+        onItemUpdated?.(res.data.item);
+      } else {
+        const res = await api.post("/market", {
+          title,
+          description,
+          price,
+          images,
+          status
+        });
+        onItemCreated?.(res.data.item);
+      }
       onClose();
     } catch (err) {
-      alert("등록 실패: " + err.message);
+      alert("요청 실패: " + err.message);
     }
   };
 
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>글쓰기</Modal.Title>
+        <Modal.Title>{isEdit ? "게시글 수정" : "글쓰기"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -68,12 +95,42 @@ function MarketWriteModal({ show, onClose, onItemCreated }) {
           </Form.Group>
 
           <Form.Group className="mb-3">
+            <Form.Label>판매 상태</Form.Label>
+            <Form.Select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="판매중">판매중</option>
+              <option value="판매완료">판매완료</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
             <Form.Label>이미지</Form.Label>
-            <div className="d-flex align-items-center gap-2">
-              <CloudinaryUploadWidget uploadImage={setImage} />
-              {image && (
-                <Image src={image} thumbnail style={{ width: "100px", height: "100px", objectFit: "cover" }} />
-              )}
+            <div className="d-flex flex-wrap gap-2 align-items-center">
+              <CloudinaryUploadWidget uploadImage={handleImageUpload} />
+              {images.map((url, idx) => (
+                <div key={idx} style={{ position: "relative", display: "inline-block" }}>
+                  <Image
+                    src={url}
+                    thumbnail
+                    style={{ width: "100px", height: "100px", objectFit: "cover", border: "2px solid #ddd", borderRadius: "8px" }}
+                  />
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    style={{
+                      position: "absolute",
+                      top: "-6px",
+                      right: "-6px",
+                      borderRadius: "50%",
+                      padding: "0 6px",
+                      fontSize: "12px",
+                      lineHeight: "1"
+                    }}
+                    onClick={() => setImages((prev) => prev.filter((_, i) => i !== idx))}
+                  >
+                    ×
+                  </Button>
+                </div>
+              ))}
             </div>
           </Form.Group>
         </Form>
@@ -83,7 +140,7 @@ function MarketWriteModal({ show, onClose, onItemCreated }) {
           닫기
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={!title || !price}>
-          등록
+          {isEdit ? "수정" : "등록"}
         </Button>
       </Modal.Footer>
     </Modal>
