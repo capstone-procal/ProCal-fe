@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import api from "../../utils/api";
-import ChatDetailModal from "./component/ChatDetailModal";
+import ChatDetailModal from "../../components/modals/ChatDetailModal";
 
 function Chat() {
   const [conversations, setConversations] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const { roomId } = useParams();
+  const userId = sessionStorage.getItem("userId");
 
   useEffect(() => {
     const fetchConversations = async () => {
       try {
         const res = await api.get("/chat/conversations");
-        setConversations(res.data.conversations);
 
-        if (roomId) {
-          const found = res.data.conversations.find((room) => room._id === roomId);
-          if (found) setSelectedRoom(found);
-        }
+        const sorted = [...res.data.conversations].sort((a, b) => {
+          const timeA = new Date(a.lastMessage?.createdAt || a.updatedAt || 0).getTime();
+          const timeB = new Date(b.lastMessage?.createdAt || b.updatedAt || 0).getTime();
+          return timeB - timeA;
+        });
+
+        setConversations(sorted);
       } catch (err) {
         console.error("채팅 목록 불러오기 실패", err);
       }
     };
+
     fetchConversations();
-  }, [roomId]);
+  }, []);
 
   const handleDelete = async (roomId) => {
     if (!window.confirm("이 채팅방을 삭제하시겠습니까?")) return;
@@ -41,31 +43,50 @@ function Chat() {
     }
   };
 
+  const isUnread = (conv) => {
+    const lastMsg = conv.lastMessage;
+    if (!lastMsg) return false;
+    return !lastMsg.isRead && String(lastMsg.senderId) !== userId;
+  };
+
   return (
     <div className="container mt-4">
       <h3>채팅 목록</h3>
       <ul className="list-group">
-        {conversations.map((conv) => (
-          <li
-            key={conv._id}
-            className="list-group-item d-flex justify-content-between align-items-center"
-            style={{ cursor: "pointer" }}
-          >
-            <div onClick={() => setSelectedRoom(conv)} style={{ flex: 1 }}>
-              <span>{conv.otherUser?.nickname || "익명"}</span>
-              <span className="badge bg-secondary ms-2">{conv.marketTitle}</span>
-            </div>
-            <button
-              className="btn btn-sm btn-danger ms-3"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(conv._id);
-              }}
+        {conversations.map((conv) => {
+          const unread = isUnread(conv);
+          return (
+            <li
+              key={conv._id}
+              className={`list-group-item d-flex justify-content-between align-items-center ${
+                unread ? "bg-light fw-bold" : ""
+              }`}
+              style={{ cursor: "pointer" }}
             >
-              <FaTrash />
-            </button>
-          </li>
-        ))}
+              <div
+                onClick={() => !selectedRoom && setSelectedRoom(conv)}
+                style={{ flex: 1 }}
+              >
+                <span>{conv.otherUser?.nickname || "익명"}</span>
+                <span className="badge bg-secondary ms-2">
+                  {conv.marketTitle}
+                </span>
+                {unread && (
+                  <span className="ms-2">🔴</span>
+                )}
+              </div>
+              <button
+                className="btn btn-sm btn-danger ms-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(conv._id);
+                }}
+              >
+                <FaTrash />
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       {selectedRoom && (

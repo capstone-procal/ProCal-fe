@@ -12,7 +12,11 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
     : ["/default-image.png"];
 
   const user = typeof item.userId === "object" ? item.userId : {};
+
+  const role = sessionStorage.getItem("userRole");
+  const isAdmin = role === "admin";
   const isOwner = currentUserId && user._id === currentUserId;
+  const canEdit = isOwner || isAdmin;
 
   const handleDelete = async () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -91,7 +95,7 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
                   채팅
                 </Button>
               )}
-              {isOwner && (
+              {canEdit && (
                 <>
                   <Button variant="outline-secondary" onClick={onEditClick}>
                     수정
