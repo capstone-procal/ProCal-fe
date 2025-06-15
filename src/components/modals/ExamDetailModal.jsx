@@ -11,9 +11,12 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [pendingBookmark, setPendingBookmark] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
     if (!selectedEvent) return;
+    setShowModal(true);
+    setLoading(true);
 
     const checkBookmark = async () => {
       try {
@@ -44,6 +47,7 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
     const token = sessionStorage.getItem("token");
     if (!token) {
       alert("로그인이 필요합니다.");
+      setShowModal(false);
       setLoginModalOpen(true);
       setPendingBookmark(true);
       return;
@@ -62,62 +66,62 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
         setReminderId(res.data.reminder._id);
       }
     } catch (err) {
-      alert(err.response?.data?.message || '찜하기/해제 실패');
+      if (err.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+        setShowModal(false);
+        setLoginModalOpen(true);
+        setPendingBookmark(true);
+      } else {
+        alert(err.response?.data?.message || '찜하기/해제 실패');
+      }
     }
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async () => {
     setLoginModalOpen(false);
-    if (pendingBookmark) {
-      setPendingBookmark(false);
-      // 로그인 세션 반영 시간 확보 후 실행
-      setTimeout(() => {
-        const token = sessionStorage.getItem("token");
-        if (token) {
-          handleBookmarkToggle();
-        } else {
-          alert("로그인 세션이 적용되지 않았습니다. 다시 시도해주세요.");
-        }
-      }, 100);
-    }
+
+    // 전체 새로고침으로 사이드바 등 로그인 상태 반영
+    window.location.reload();
   };
 
-  if (!selectedEvent || loading) return null;
+  if (!selectedEvent) return null;
 
   return (
     <>
-      <Modal show={true} onHide={onClose} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEvent.title}</Modal.Title>
-        </Modal.Header>
+      {showModal && !loading && (
+        <Modal show={true} onHide={onClose} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedEvent.title}</Modal.Title>
+          </Modal.Header>
 
-        <Modal.Body>
-          <div style={{ marginBottom: '20px' }}>
-            <p><strong>🗓️ 시험일자:</strong> {selectedEvent.start}</p>
-            <p><strong>🎯 라운드:</strong> {selectedEvent.extendedProps.round}</p>
-            <p><strong>📝 유형:</strong> {selectedEvent.extendedProps.type}</p>
-            <p><strong>📄 응시자격:</strong> {selectedEvent.extendedProps.eligibility}</p>
-            <a href={selectedEvent.extendedProps.officialSite} target="_blank" rel="noopener noreferrer">
-              🔗 공식 사이트 바로가기
-            </a>
-          </div>
+          <Modal.Body>
+            <div style={{ marginBottom: '20px' }}>
+              <p><strong>🗓️ 시험일자:</strong> {selectedEvent.start}</p>
+              <p><strong>🎯 라운드:</strong> {selectedEvent.extendedProps.round}</p>
+              <p><strong>📝 유형:</strong> {selectedEvent.extendedProps.type}</p>
+              <p><strong>📄 응시자격:</strong> {selectedEvent.extendedProps.eligibility}</p>
+              <a href={selectedEvent.extendedProps.officialSite} target="_blank" rel="noopener noreferrer">
+                🔗 공식 사이트 바로가기
+              </a>
+            </div>
 
-          <div style={{ marginBottom: '20px' }}>
-            <Button variant={isBookmarked ? "danger" : "primary"} onClick={handleBookmarkToggle}>
-              {isBookmarked ? "찜 해제" : "찜하기"}
-            </Button>
-          </div>
-        </Modal.Body>
+            <div style={{ marginBottom: '20px' }}>
+              <Button variant={isBookmarked ? "danger" : "primary"} onClick={handleBookmarkToggle}>
+                {isBookmarked ? "찜 해제" : "찜하기"}
+              </Button>
+            </div>
+          </Modal.Body>
 
-        <Modal.Footer>
-          <Link to={`/certificate/${selectedEvent.extendedProps.certificateId}`}>
-            <Button variant="info" onClick={onClose} style={{ marginRight: '10px' }}>
-              상세페이지 보기
-            </Button>
-          </Link>
-          <Button variant="secondary" onClick={onClose}>닫기</Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Footer>
+            <Link to={`/certificate/${selectedEvent.extendedProps.certificateId}`}>
+              <Button variant="info" onClick={onClose} style={{ marginRight: '10px' }}>
+                상세페이지 보기
+              </Button>
+            </Link>
+            <Button variant="secondary" onClick={onClose}>닫기</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
 
       {loginModalOpen && (
         <LoginModal
