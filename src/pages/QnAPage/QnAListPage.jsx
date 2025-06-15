@@ -20,14 +20,17 @@ function QnAListPage() {
   }, []);
 
   const fetchPosts = async () => {
-    try {
-      const res = await api.get("/post");
-      setPosts(res.data.posts);
-      setFilteredPosts(res.data.posts); 
-    } catch (err) {
-      alert("글 목록 로딩 실패");
-    }
-  };
+  try {
+    const res = await api.get("/post");
+    const sortedPosts = res.data.posts.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    setPosts(sortedPosts);
+    setFilteredPosts(sortedPosts);
+  } catch (err) {
+    alert("글 목록 로딩 실패");
+  }
+};
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);

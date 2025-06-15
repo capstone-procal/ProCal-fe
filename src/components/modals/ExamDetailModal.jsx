@@ -80,7 +80,6 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
   const handleLoginSuccess = async () => {
     setLoginModalOpen(false);
 
-    // 전체 새로고침으로 사이드바 등 로그인 상태 반영
     window.location.reload();
   };
 
