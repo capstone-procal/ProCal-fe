@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import api from "../../utils/api";
 import { Link } from 'react-router-dom';
 import LoginModal from "../../components/modals/LoginModal";
+import "../../styles/buttons.css"
 
 const EventDetailModal = ({ selectedEvent, onClose }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);

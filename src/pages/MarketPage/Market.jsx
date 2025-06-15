@@ -6,6 +6,7 @@ import MarketDetailModal from "../../components/modals/MarketDetailModal";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Dropdown, ButtonGroup } from "react-bootstrap";
 import "./Market.css"
+import "../../styles/buttons.css"
 
 function Market() {
   const [items, setItems] = useState([]);
@@ -91,7 +92,7 @@ function Market() {
             </Dropdown.Menu>
           </Dropdown>
 
-          <Button variant="outline-primary" onClick={() => setShowWriteModal(true)}>
+          <Button className="write-btn" onClick={() => setShowWriteModal(true)}>
             ✏️ 글쓰기
           </Button>
         </div>

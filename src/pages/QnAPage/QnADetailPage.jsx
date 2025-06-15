@@ -4,6 +4,7 @@ import api from "../../utils/api";
 import CommentList from "../../components/lists/CommentList";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import "./QnADetailPage.css"
+import "../../styles/buttons.css"
 
 function QnADetailPage() {
   const { postId } = useParams();
@@ -105,10 +106,10 @@ function QnADetailPage() {
             <em>작성자: {post.userId.name}</em>
           </p>
           <div className="qnadetail-button-group">
-            <Button variant="outline-primary" onClick={() => setEditMode(true)}>
+            <Button className="write-btn" onClick={() => setEditMode(true)}>
               수정
             </Button>
-            <Button variant="outline-danger" onClick={handleDelete}>
+            <Button className="write-btn" onClick={handleDelete}>
               삭제
             </Button>
           </div>
