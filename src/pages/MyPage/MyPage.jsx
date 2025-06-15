@@ -22,9 +22,8 @@ const MyPage = () => {
       const reminderRes = await api.get('/reminder');
       const mappedExams = reminderRes.data.reminders.map((r) => ({
         reminderId: r._id,
-        name: r.certificateId.name,
-        date: r.certificateId.schedule[0]?.examStart,
-        color: r.color || '#f8f9fa',
+        certificate: r.certificateId,
+        color: r.color || '#f8f9fa'
       }));
       setMyExams(mappedExams);
     } catch (err) {
@@ -59,12 +58,26 @@ const MyPage = () => {
     }
   };
 
-  const getDday = (date) => {
+  const getDday = (certificate) => {
     const today = new Date();
-    const target = new Date(date);
-    const diff = target - today;
-    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return days > 0 ? `D-${days}` : '시험 종료';
+    const sorted = [...certificate.schedule]
+      .filter(s => s.examStart)
+      .sort((a, b) => new Date(a.examStart) - new Date(b.examStart));
+
+    for (let i = 0; i < sorted.length; i++) {
+      const start = new Date(sorted[i].examStart);
+      const end = sorted[i].examEnd ? new Date(sorted[i].examEnd) : null;
+
+      if (today < start) {
+        const days = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+        return `D-${days}`;
+      }
+
+      if (end && today >= start && today <= end) return '시험 중';
+      if (end && today.toDateString() === end.toDateString()) return '시험 종료';
+    }
+
+    return '예정된 시험 없음';
   };
 
   if (!userInfo) return <Container className="py-5">로딩 중...</Container>;
@@ -77,10 +90,7 @@ const MyPage = () => {
 
       <Container className="py-4">
         <Row className="mb-4">
-          <Col
-  md={4}
-  className="d-flex flex-column justify-content-center align-items-center">
- 
+          <Col md={4} className="d-flex flex-column justify-content-center align-items-center">
             <Image
               src={userInfo.profileImage || '/default-profile.png'}
               roundedCircle
@@ -120,7 +130,7 @@ const MyPage = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <span>{exam.name} - {getDday(exam.date)}</span>
+                  <span>{exam.certificate.name} - {getDday(exam.certificate)}</span>
                   <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                     <Dropdown>
                       <Dropdown.Toggle
