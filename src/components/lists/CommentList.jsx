@@ -47,7 +47,7 @@ function CommentList({ postId }) {
           onChange={(e) => setNewComment(e.target.value)}
         />
         <div className="commentlist-submit-btn">
-          <Button size="sm" onClick={handleCommentSubmit}>
+          <Button className="write-btn" size="sm" onClick={handleCommentSubmit}>
             등록
           </Button>
         </div>

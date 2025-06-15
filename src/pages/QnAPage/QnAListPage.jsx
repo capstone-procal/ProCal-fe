@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import QnAWriteModal from "../../components/modals/QnAWriteModal";
 import { useNavigate } from "react-router-dom";
 import "./QnAListPage.css"
+import "../../styles/buttons.css"
 
 function QnAListPage() {
   const [posts, setPosts] = useState([]);
@@ -28,7 +29,7 @@ function QnAListPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="qnalist-title">Q&A</h2>
         <Button
-          className="qnalist-write-btn"
+          className="write-btn"
           onClick={() => setShowWriteModal(true)}
         >
           ✏️ 글쓰기
