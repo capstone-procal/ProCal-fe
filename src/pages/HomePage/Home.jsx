@@ -13,10 +13,17 @@ const Home = () => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [savedEvent, setSavedEvent] = useState(null);
-  const [examEvents, setExamEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]); 
+  const [examEvents, setExamEvents] = useState([]); 
   const [reminders, setReminders] = useState([]);
-  const navigate = useNavigate();
+  const [visibleTypes, setVisibleTypes] = useState({
+    application: true,
+    exam: true,
+    result: true
+  });
+  const [showOnlyBookmarked, setShowOnlyBookmarked] = useState(false);
 
+  const navigate = useNavigate();
   const isLoggedIn = !!sessionStorage.getItem("token");
 
   const handleEventClick = (info) => {
@@ -34,6 +41,13 @@ const Home = () => {
     setSelectedEvent(null);
   };
 
+  const filterEvents = (events, types, onlyBookmarked = false) => {
+    return events.filter(event =>
+      types[event.type] &&
+      (!onlyBookmarked || reminders.some(r => r.certificateId._id === event.extendedProps.certificateId))
+    );
+  };
+
   const fetchCertificates = async (reminderList = []) => {
     try {
       const res = await api.get("/certificate");
@@ -46,23 +60,70 @@ const Home = () => {
 
       const events = certificates.flatMap(cert =>
         cert.schedule
-          .filter(item => item.examStart && item.examEnd && !isNaN(new Date(item.examEnd)))
-          .map(item => ({
-            title: `${cert.name} (${item.round} ${item.type})`,
-            start: item.examStart,
-            end: new Date(new Date(item.examEnd).getTime() + 86400000).toISOString().split("T")[0],
-            color: colorMap[cert._id],
-            extendedProps: {
+          .filter(item => item.examStart || item.applicationStart || item.resultDate)
+          .flatMap(item => {
+            const baseProps = {
               certificateId: cert._id,
               round: item.round,
               type: item.type,
               officialSite: cert.officialSite,
               eligibility: cert.eligibility,
+            };
+
+            const events = [];
+
+            if (item.applicationStart) {
+              events.push({
+                title: `${cert.name} (${item.round}) 접수 시작`,
+                start: new Date(item.applicationStart).toISOString().split("T")[0],
+                color: colorMap[cert._id],
+                type: "application",
+                extendedProps: baseProps,
+              });
             }
-          }))
+            if (item.applicationEnd) {
+              events.push({
+                title: `${cert.name} (${item.round}) 접수 마감`,
+                start: new Date(item.applicationEnd).toISOString().split("T")[0],
+                color: colorMap[cert._id],
+                type: "application",
+                extendedProps: baseProps,
+              });
+            }
+            if (item.examStart) {
+              events.push({
+                title: `${cert.name} (${item.round} ${item.type} 시험 시작)`,
+                start: new Date(item.examStart).toISOString().split("T")[0],
+                color: colorMap[cert._id],
+                type: "exam",
+                extendedProps: baseProps,
+              });
+            }
+            if (item.examEnd) {
+              events.push({
+                title: `${cert.name} (${item.round} ${item.type} 시험 종료)`,
+                start: new Date(item.examEnd).toISOString().split("T")[0],
+                color: colorMap[cert._id],
+                type: "exam",
+                extendedProps: baseProps,
+              });
+            }
+            if (item.resultDate) {
+              events.push({
+                title: `${cert.name} (${item.round}) 결과 발표`,
+                start: new Date(item.resultDate).toISOString().split("T")[0],
+                color: colorMap[cert._id],
+                type: "result",
+                extendedProps: baseProps,
+              });
+            }
+
+            return events;
+          })
       );
 
-      setExamEvents(events);
+      setAllEvents(events);
+      setExamEvents(filterEvents(events, visibleTypes, showOnlyBookmarked));
     } catch (err) {
       console.error("캘린더 로드 실패:", err?.error ?? err);
     }
@@ -126,9 +187,54 @@ const Home = () => {
     loadInitialData();
   }, []);
 
+  useEffect(() => {
+    setExamEvents(filterEvents(allEvents, visibleTypes, showOnlyBookmarked));
+  }, [visibleTypes, showOnlyBookmarked]);
+
   return (
     <div>
       <h1>🏠 자격증 달력 홈</h1>
+
+      <div className="filter-buttons">
+        <label>
+          <input
+            type="checkbox"
+            checked={visibleTypes.application}
+            onChange={() =>
+              setVisibleTypes(prev => ({ ...prev, application: !prev.application }))
+            }
+          />
+          접수 일정
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={visibleTypes.exam}
+            onChange={() =>
+              setVisibleTypes(prev => ({ ...prev, exam: !prev.exam }))
+            }
+          />
+          시험 일정
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={visibleTypes.result}
+            onChange={() =>
+              setVisibleTypes(prev => ({ ...prev, result: !prev.result }))
+            }
+          />
+          결과 발표
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={showOnlyBookmarked}
+            onChange={() => setShowOnlyBookmarked(prev => !prev)}
+          />
+          찜한 자격증만 보기
+        </label>
+      </div>
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
