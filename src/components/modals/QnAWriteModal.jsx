@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import api from "../../utils/api";
+import "../../styles/buttons.css"
 
 function QnAWriteModal({ show, onClose, onPostCreated }) {
   const [title, setTitle] = useState("");
@@ -59,10 +60,10 @@ function QnAWriteModal({ show, onClose, onPostCreated }) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button className="write-btn" onClick={onClose}>
           닫기
         </Button>
-        <Button variant="primary" onClick={handleSubmit} disabled={!title || !content}>
+        <Button className="write-btn" onClick={handleSubmit} disabled={!title || !content}>
           등록
         </Button>
       </Modal.Footer>

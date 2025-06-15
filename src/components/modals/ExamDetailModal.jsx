@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import api from "../../utils/api";
 import { Link } from 'react-router-dom';
+import "../../styles/buttons.css"
 
 const EventDetailModal = ({ selectedEvent, onClose }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -74,7 +75,8 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <Button variant={isBookmarked ? "danger" : "primary"} onClick={handleBookmarkToggle}>
+          <Button className={`bookmark-button ${isBookmarked ? 'bookmarked' : ''}`}
+    onClick={handleBookmarkToggle}>
             {isBookmarked ? "찜 해제" : "찜하기"}
           </Button>
         </div>
@@ -82,11 +84,11 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
 
       <Modal.Footer>
         <Link to={`/certificate/${selectedEvent.extendedProps.certificateId}`}>
-          <Button variant="info" onClick={onClose} style={{ marginRight: '10px' }}>
+          <Button className='write-btn' onClick={onClose} style={{ marginRight: '10px' }}>
             상세페이지 보기
           </Button>
         </Link>
-        <Button variant="secondary" onClick={onClose}>닫기</Button>
+        <Button className='write-btn' onClick={onClose}>닫기</Button>
       </Modal.Footer>
     </Modal>
   );

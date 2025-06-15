@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import api from '../../utils/api';
 import './EditProfileModal.css';
+import "../../styles/buttons.css"
 import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
 
 const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
@@ -117,10 +118,10 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose} disabled={saving}>
+        <Button className='write-btn' onClick={onClose} disabled={saving}>
           취소
         </Button>
-        <Button variant="primary" onClick={handleSave} disabled={saving}>
+        <Button className='write-btn' onClick={handleSave} disabled={saving}>
           {saving ? <Spinner size="sm" animation="border" /> : "저장"}
         </Button>
       </Modal.Footer>
