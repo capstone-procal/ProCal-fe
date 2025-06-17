@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import api from "../../utils/api";
-import ChatDetailModal from "./component/ChatDetailModal";
+import ChatDetailModal from "../../components/modals/ChatDetailModal";
 
 function Chat() {
   const [conversations, setConversations] = useState([]);
@@ -56,7 +56,7 @@ function Chat() {
               <span className="badge bg-secondary ms-2">{conv.marketTitle}</span>
             </div>
             <button
-              className="btn btn-sm btn-danger ms-3"
+              className="write-btn"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDelete(conv._id);

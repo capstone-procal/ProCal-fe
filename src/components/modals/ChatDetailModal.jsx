@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import api from "../../../utils/api";
+import api from "../../utils/api"
 
 function ChatDetailModal({ room, onClose }) {
   const [messages, setMessages] = useState([]);
@@ -55,7 +55,7 @@ function ChatDetailModal({ room, onClose }) {
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="메시지를 입력하세요..."
           />
-          <Button onClick={handleSend} variant="primary" className="ms-2">전송</Button>
+          <Button onClick={handleSend} variant="primary" className="write-btn">전송</Button>
         </Form.Group>
       </Modal.Body>
     </Modal>
