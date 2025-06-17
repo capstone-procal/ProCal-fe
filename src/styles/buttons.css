@@ -84,3 +84,15 @@
   background-color: #eaeaea;
   color: #222;
 }
+
+.title{
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.Main-container{
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}

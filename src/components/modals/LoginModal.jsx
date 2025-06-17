@@ -107,7 +107,7 @@ function LoginModal({ show, onClose, onLoginSuccess, onSwitchToSignup }) {
 
       <Modal.Footer>
         <Button
-          variant="primary"
+          variant="secondary"
           onClick={handleLogin}
           disabled={!email || !password || !!emailError}
         >

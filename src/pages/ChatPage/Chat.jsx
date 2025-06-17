@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import api from "../../utils/api";
 import ChatDetailModal from "../../components/modals/ChatDetailModal";
+import "./Chat.css"
 
 function Chat() {
   const [conversations, setConversations] = useState([]);
@@ -50,39 +51,34 @@ function Chat() {
   };
 
   return (
-    <div className="container mt-4">
-      <h3>채팅 목록</h3>
-      <ul className="list-group">
+  <div className="Main-container chat">
+    <h3 className="chat-title">채팅 목록</h3>
+    <div className="chat-card">
+      <ul className="chat-list">
         {conversations.map((conv) => {
           const unread = isUnread(conv);
           return (
             <li
               key={conv._id}
-              className={`list-group-item d-flex justify-content-between align-items-center ${
-                unread ? "bg-light fw-bold" : ""
-              }`}
-              style={{ cursor: "pointer" }}
+              className="chat-list-item"
+              onClick={() => !selectedRoom && setSelectedRoom(conv)}
+              style={{ cursor: "pointer", fontWeight: unread ? "bold" : "normal" }}
             >
-              <div
-                onClick={() => !selectedRoom && setSelectedRoom(conv)}
-                style={{ flex: 1 }}
-              >
+              <div className="chat-user">
                 <span>{conv.otherUser?.nickname || "익명"}</span>
-                <span className="badge bg-secondary ms-2">
-                  {conv.marketTitle}
-                </span>
+                <span className="chat-badge">{conv.marketTitle}</span>
                 {unread && (
-                  <span className="ms-2">🔴</span>
+                  <span>🔴</span>
                 )}
               </div>
               <button
-                className="btn btn-sm btn-danger ms-3"
+                className="chat-delete-btn"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDelete(conv._id);
                 }}
               >
-                <FaTrash />
+                <FaTrash/>
               </button>
             </li>
           );
@@ -96,6 +92,7 @@ function Chat() {
         />
       )}
     </div>
+  </div>  
   );
 }
 

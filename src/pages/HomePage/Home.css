@@ -1,3 +1,15 @@
+.fc{
+  max-width: 1000px;
+  margin: 0 auto; 
+}
+
+.home{
+  max-width: 1000px;
+  margin: 0 auto; 
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
 .fc .fc-day-today {
   background-color: transparent !important;
   border: none !important;
@@ -68,4 +80,21 @@
   cursor: default;
 }
 
+.home-filter-buttons{
+  max-width: 1000px;
+  margin: 0 auto; 
+  padding-bottom: 10px;
+}
+
+.home-filter-buttons input[type="checkbox"] {
+  accent-color: #888888; 
+}
+
+.home-filter-buttons label {
+  margin-right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
 

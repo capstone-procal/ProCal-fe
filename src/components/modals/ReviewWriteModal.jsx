@@ -84,7 +84,7 @@ const ReviewWriteModal = ({ show, onClose, certificateId, onSuccess, editingRevi
         </Form>
       </Modal.Body>
       <Modal.Footer>
-      <Button variant="primary" onClick={handleSubmit}>
+      <Button variant="secondary" onClick={handleSubmit}>
         {editingReview ? '수정' : '등록'}
       </Button>
       </Modal.Footer>

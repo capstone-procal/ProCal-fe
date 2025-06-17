@@ -75,9 +75,9 @@ function Market() {
 });
 
   return (
-    <Container className="py-4">
+    <Container className="Main-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1 className="fw-bold">Market</h1>
+        <h1 className="title">Market</h1>
         <div className="d-flex gap-2 align-items-center">
 
           <Dropdown as={ButtonGroup} className="dropdown">

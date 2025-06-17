@@ -8,7 +8,7 @@ import EditProfileModal from '../../components/modals/EditProfileModal';
 import "./MyPage.css"
 
 const AVAILABLE_COLORS = ['#54b5e2', '#eeb5ec', '#fa7f12', '#f6e705', '#1aba25'];
-
+//const AVAILABLE_COLORS = ['#a7d8f0','#f5c8e6','#ffc89e', '#fff6a5', '#b7e5b4'];
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [myExams, setMyExams] = useState([]);
@@ -103,7 +103,7 @@ const MyPage = () => {
               <Card.Body>
                 <Card.Title className="d-flex justify-content-between align-items-center">
                   <span>회원정보</span>
-                  <Button variant="link" onClick={() => setEditModalOpen(true)}>
+                  <Button variant="link" style={{ color: 'black', textDecoration: 'none' }} onClick={() => setEditModalOpen(true)}>
                     수정
                   </Button>
                 </Card.Title>
@@ -165,7 +165,7 @@ const MyPage = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                     <Button
-                      variant="outline-danger"
+                      variant="danger"
                       size="sm"
                       onClick={() => handleDelete(exam.reminderId)}
                     >

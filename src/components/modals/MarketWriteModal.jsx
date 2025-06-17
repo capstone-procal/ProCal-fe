@@ -139,7 +139,7 @@ function MarketWriteModal({ show, onClose, onItemCreated, onItemUpdated, isEdit 
         <Button variant="secondary" onClick={onClose}>
           닫기
         </Button>
-        <Button variant="primary" onClick={handleSubmit} disabled={!title || !price}>
+        <Button variant="secondary" onClick={handleSubmit} disabled={!title || !price}>
           {isEdit ? "수정" : "등록"}
         </Button>
       </Modal.Footer>
