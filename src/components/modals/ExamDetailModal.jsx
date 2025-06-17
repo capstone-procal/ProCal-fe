@@ -88,24 +88,24 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
   return (
     <>
       {showModal && !loading && (
-        <Modal show={true} onHide={onClose} size="lg">
+        <Modal show={true} onHide={onClose} size="lg" centered>
           <Modal.Header closeButton>
             <Modal.Title>{selectedEvent.title}</Modal.Title>
           </Modal.Header>
 
-          <Modal.Body>
+          <Modal.Body className='modal-box'>
             <div style={{ marginBottom: '20px' }}>
               <p><strong>🗓️ 시험일자:</strong> {selectedEvent.start}</p>
               <p><strong>🎯 라운드:</strong> {selectedEvent.extendedProps.round}</p>
               <p><strong>📝 유형:</strong> {selectedEvent.extendedProps.type}</p>
               <p><strong>📄 응시자격:</strong> {selectedEvent.extendedProps.eligibility}</p>
-              <a href={selectedEvent.extendedProps.officialSite} target="_blank" rel="noopener noreferrer">
+              <a href={selectedEvent.extendedProps.officialSite} target="_blank" rel="noopener noreferrer" style={{ color: 'black', textDecoration: 'none' }}>
                 🔗 공식 사이트 바로가기
               </a>
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <Button variant={isBookmarked ? "danger" : "primary"} onClick={handleBookmarkToggle}>
+              <Button variant={isBookmarked ? "danger" : "secondary"} onClick={handleBookmarkToggle}>
                 {isBookmarked ? "찜 해제" : "찜하기"}
               </Button>
             </div>
@@ -113,7 +113,7 @@ const EventDetailModal = ({ selectedEvent, onClose }) => {
 
           <Modal.Footer>
             <Link to={`/certificate/${selectedEvent.extendedProps.certificateId}`}>
-              <Button variant="info" onClick={onClose} style={{ marginRight: '10px' }}>
+              <Button variant="secondary" onClick={onClose} style={{ marginRight: '10px' }}>
                 상세페이지 보기
               </Button>
             </Link>

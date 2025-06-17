@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Tab, Tabs, Button } from 'react-bootstrap';
 import api from '../../utils/api'; 
 import ReviewWriteModal from '../../components/modals/ReviewWriteModal'; 
+import "./Detail.css"
 
 
 const Detail = () => {
@@ -68,13 +69,13 @@ const Detail = () => {
   if (!certificate) return <div className="p-4">자격증 정보를 찾을 수 없습니다.</div>;
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">{certificate.name}</h2>
-      <p className="mb-2"><strong>분류:</strong> {certificate.category.join(', ')}</p>
-      <p className="mb-2"><strong>응시 자격:</strong> {certificate.eligibility}</p>
-      <p className="mb-2"><strong>합격 기준:</strong> {certificate.passingCriteria}</p>
-      <p className="mb-2">
-        <strong>공식 사이트:</strong> <a href={certificate.officialSite} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">{certificate.officialSite}</a>
+    <div className="detail-container">
+      <h2 className="detail-header">{certificate.name}</h2>
+      <p className="detail-section"><strong>분류:</strong> {certificate.category.join(', ')}</p>
+      <p className="detail-section"><strong>응시 자격:</strong> {certificate.eligibility}</p>
+      <p className="detail-section"><strong>합격 기준:</strong> {certificate.passingCriteria}</p>
+      <p className="detail-section">
+        <strong>공식 사이트:</strong> <a href={certificate.officialSite} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" style={{ color: 'black' }}>{certificate.officialSite}</a>
       </p>
 
       <div className="mt-8">
@@ -82,12 +83,12 @@ const Detail = () => {
           <Tab eventKey="review" title="후기">
             {reviewReviews.length > 0 ? (
               reviewReviews.map((review, idx) => (
-                <div key={idx} className="border-b border-gray-300 py-2">
+                <div key={idx} className="detail-review-box">
                   <p><strong>작성자:</strong> {review.userId.name}</p>
                   <p><strong>내용:</strong> {review.content}</p>
                   <p><strong>난이도:</strong> {review.difficulty} / 5</p>
 
-                  <div className="mt-2 d-flex gap-2">
+                  <div className="detail-review-buttons">
                   <Button size="sm" variant="outline-secondary" onClick={() => {
                       const token = sessionStorage.getItem('token');
                       if (!token) {
@@ -117,11 +118,11 @@ const Detail = () => {
           <Tab eventKey="tip" title="TIP">
             {tipReviews.length > 0 ? (
               tipReviews.map((review, idx) => (
-                <div key={idx} className="border-b border-gray-300 py-2">
+                <div key={idx} className="detail-review-box">
                   <p><strong>작성자:</strong> {review.userId.name}</p>
                   <p><strong>내용:</strong> {review.content}</p>
 
-                  <div className="mt-2 d-flex gap-2">
+                  <div className="detail-review-buttons">
                     <Button size="sm" variant="outline-secondary" onClick={() => {
                       const token = sessionStorage.getItem('token');
                       if (!token) {

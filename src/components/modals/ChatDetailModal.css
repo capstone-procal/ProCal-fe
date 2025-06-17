@@ -8,14 +8,14 @@
   padding: 10px 15px;
   max-width: 70%;
   word-break: break-word;
-  border-radius: 20px;
+  border-radius: 8px;
   margin-bottom: 8px;
   position: relative;
   display: inline-block;
 }
 
 .chat-bubble.mine {
-  background-color: #0d6efd; 
+  background-color: #6c757d; 
   color: white;
   margin-left: auto;         
   text-align: right;

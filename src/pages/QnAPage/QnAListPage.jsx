@@ -43,9 +43,9 @@ function QnAListPage() {
   };
 
   return (
-    <div className="qnalist-container">
+    <div className="Main-container">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="qnalist-title">Q&A</h2>
+        <h2 className="title">Q&A</h2>
         <div className="d-flex align-items-center gap-2">
           <Dropdown onSelect={handleCategorySelect}>
             <Dropdown.Toggle variant="outline-primary" className="write-btn">

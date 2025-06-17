@@ -1,4 +1,3 @@
-// ✅ ChatDetailModal.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import api from "../../utils/api";
@@ -94,7 +93,7 @@ function ChatDetailModal({ room, onClose }) {
             }}
             placeholder="메시지를 입력하세요..."
           />
-          <Button onClick={handleSend} variant="primary" className="ms-2">
+          <Button onClick={handleSend} variant="secondary" className="ms-2">
             전송
           </Button>
         </Form.Group>

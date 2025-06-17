@@ -91,7 +91,7 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
 
             <div className="d-flex gap-2 mt-4">
               {!isOwner && (
-                <Button className="write-btn" onClick={handleChat}>
+                <Button variant="secondary" onClick={handleChat}>
                   채팅
                 </Button>
               )}
