@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import CommentList from "../../components/lists/CommentList";
 import { Container, Form, Button, Card } from "react-bootstrap";
-import "./QnADetailPage.css"
-import "../../styles/buttons.css"
+import "./QnADetailPage.css";
+import "../../styles/buttons.css";
 
 function QnADetailPage() {
   const { postId } = useParams();
@@ -14,21 +14,35 @@ function QnADetailPage() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("질문");
   const [content, setContent] = useState("");
+  const [canEdit, setCanEdit] = useState(false);
 
   useEffect(() => {
-    api.get(`/post/detail/${postId}`)
-      .then(res => {
-        setPost(res.data.post);
-        setTitle(res.data.post.title);
-        setCategory(res.data.post.category);
-        setContent(res.data.post.content);
+    const currentUserId = sessionStorage.getItem("userId");
+    const currentRole = sessionStorage.getItem("userRole");
+
+    api
+      .get(`/post/detail/${postId}`)
+      .then((res) => {
+        const loadedPost = res.data.post;
+        setPost(loadedPost);
+        setTitle(loadedPost.title);
+        setCategory(loadedPost.category);
+        setContent(loadedPost.content);
+
+        const isOwner = String(loadedPost.userId._id) === currentUserId;
+        const isAdmin = currentRole === "admin";
+        setCanEdit(isOwner || isAdmin); 
       })
-      .catch(err => alert(err.message || "게시글을 불러올 수 없습니다."));
+      .catch((err) => alert(err.message || "게시글을 불러올 수 없습니다."));
   }, [postId]);
 
   const handleUpdate = async () => {
     try {
-      await api.put(`/post/${postId}`, { title, category, content });
+      await api.put(`/post/${postId}`, {
+        title,
+        content,
+        category
+      });
       alert("수정되었습니다.");
       setEditMode(false);
     } catch (err) {
@@ -64,7 +78,7 @@ function QnADetailPage() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>카테고리</Form.Label>
+              <Form.Label>카테고리 (표시용)</Form.Label>
               <Form.Select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -99,20 +113,22 @@ function QnADetailPage() {
         <Card className="qnadetail-card">
           <h2 className="qnadetail-title">{post.title}</h2>
           <p className="qnadetail-category">
-            <strong>카테고리:</strong> {post.category}
+            <strong>카테고리:</strong> {post.category || "없음"}
           </p>
           <p className="qnadetail-content">{post.content}</p>
           <p className="qnadetail-author">
             <em>작성자: {post.userId.name}</em>
           </p>
-          <div className="qnadetail-button-group">
-            <Button className="write-btn" onClick={() => setEditMode(true)}>
-              수정
-            </Button>
-            <Button className="write-btn" onClick={handleDelete}>
-              삭제
-            </Button>
-          </div>
+          {canEdit && (
+            <div className="qnadetail-button-group">
+              <Button className="write-btn" onClick={() => setEditMode(true)}>
+                수정
+              </Button>
+              <Button className="write-btn" onClick={handleDelete}>
+                삭제
+              </Button>
+            </div>
+          )}
         </Card>
       )}
 
