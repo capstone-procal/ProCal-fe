@@ -77,7 +77,6 @@ const Detail = () => {
         <strong>공식 사이트:</strong> <a href={certificate.officialSite} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">{certificate.officialSite}</a>
       </p>
 
-      {/* 후기/팁 탭 추가 */}
       <div className="mt-8">
         <Tabs defaultActiveKey="review" id="review-tab" className="mb-3">
           <Tab eventKey="review" title="후기">
@@ -88,7 +87,6 @@ const Detail = () => {
                   <p><strong>내용:</strong> {review.content}</p>
                   <p><strong>난이도:</strong> {review.difficulty} / 5</p>
 
-                  {/* 수정/삭제 버튼 */}
                   <div className="mt-2 d-flex gap-2">
                   <Button size="sm" variant="outline-secondary" onClick={() => {
                       const token = sessionStorage.getItem('token');
@@ -123,7 +121,6 @@ const Detail = () => {
                   <p><strong>작성자:</strong> {review.userId.name}</p>
                   <p><strong>내용:</strong> {review.content}</p>
 
-                  {/* 수정/삭제 버튼 */}
                   <div className="mt-2 d-flex gap-2">
                     <Button size="sm" variant="outline-secondary" onClick={() => {
                       const token = sessionStorage.getItem('token');
@@ -153,10 +150,9 @@ const Detail = () => {
         </Tabs>
       </div>
 
-      {/* 후기/TIP 작성 버튼 */}
       <div className="mt-5">
         <div className="d-flex gap-3">
-          <Button variant="primary" onClick={() => {
+          <Button className='write-btn' onClick={() => {
             const token = sessionStorage.getItem('token');
             if (!token) {
               alert("로그인이 필요한 기능입니다. 로그인 후 이용해 주세요.");

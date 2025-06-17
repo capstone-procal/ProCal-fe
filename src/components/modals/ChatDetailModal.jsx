@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import api from "../../utils/api";
 import "./ChatDetailModal.css";
 
+
 function ChatDetailModal({ room, onClose }) {
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
@@ -80,7 +81,6 @@ function ChatDetailModal({ room, onClose }) {
           ))}
           <div ref={bottomRef} />
         </div>
-
         <Form.Group className="d-flex">
           <Form.Control
             type="text"

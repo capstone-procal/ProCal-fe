@@ -91,16 +91,16 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
 
             <div className="d-flex gap-2 mt-4">
               {!isOwner && (
-                <Button variant="primary" onClick={handleChat}>
+                <Button className="write-btn" onClick={handleChat}>
                   채팅
                 </Button>
               )}
               {canEdit && (
                 <>
-                  <Button variant="outline-secondary" onClick={onEditClick}>
+                  <Button className="write-btn" onClick={onEditClick}>
                     수정
                   </Button>
-                  <Button variant="outline-danger" onClick={handleDelete}>
+                  <Button className="write-btn" onClick={handleDelete}>
                     삭제
                   </Button>
                 </>

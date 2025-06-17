@@ -79,9 +79,11 @@ function Market() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="fw-bold">Market</h1>
         <div className="d-flex gap-2 align-items-center">
-          <Dropdown as={ButtonGroup}>
-            <Button variant="outline-secondary">{filter}</Button>
-            <Dropdown.Toggle split variant="outline-secondary" />
+
+          <Dropdown as={ButtonGroup} className="dropdown">
+            <Dropdown.Toggle variant="outline-secondary">
+              {filter}
+            </Dropdown.Toggle>
 
             <Dropdown.Menu>
               {["전체", "판매중", "판매완료", "내 게시글"].map((type) => (
