@@ -193,7 +193,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1 className='home title'>🏠 자격증 달력 홈</h1>
+      <h1 className='home'>🏠 자격증 달력 홈</h1>
 
       <div className="home-filter-buttons">
         <label>

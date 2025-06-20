@@ -75,25 +75,37 @@ function Chat() {
 
 
   return (
-    <div className="Main-container chat">
-      <h3 className="chat-title">채팅 목록</h3>
-      <div className="chat-card">
-        <ul className="chat-list">
-          {conversations.map((conv) => {
-            const unread = isUnread(conv);
-            return (
-              <li
-                key={conv._id}
-                className="chat-list-item"
-                onClick={() => { //jiyun
+
+  <div className="Main-container chat">
+    <div className="chat-card">
+      <h1 className="chat-title">채팅 목록</h1>
+      <ul className="chat-list">
+        {conversations.map((conv) => {
+          const unread = isUnread(conv);
+          return (
+            <li
+              key={conv._id}
+              className="chat-list-item"
+              onClick={() => { 
                   if (!selectedRoom) {
                     setSelectedRoom(conv);
                     markAsRead(conv._id); 
                   }
                 }}
-                style={{
-                  cursor: "pointer",
-                  fontWeight: unread ? "bold" : "normal",
+              style={{ cursor: "pointer", fontWeight: unread ? "bold" : "normal" }}
+            >
+              <div className="chat-user">
+                <span>{conv.otherUser?.nickname || "익명"}</span>
+                <span className="chat-badge">{conv.marketTitle}</span>
+                {unread && (
+                  <span>🔴</span>
+                )}
+              </div>
+              <button
+                className="chat-delete-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(conv._id);
                 }}
               >
                 <div className="chat-user">

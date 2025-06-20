@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import SearchBanner from '../components/SearchBanner';
+import Footer from '../components/Footer';
 
 const MainLayout = ({ children, userRole, isLoggedIn, onLogout, onLoginClick }) => {
   return (
@@ -11,9 +12,8 @@ const MainLayout = ({ children, userRole, isLoggedIn, onLogout, onLoginClick }) 
 
       <div className="flex flex-col flex-1">
         <SearchBanner />
-        <main className="flex-1 overflow-y-auto p-4">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-4">{children}</main>
+        <Footer />
       </div>
     </div>
   );

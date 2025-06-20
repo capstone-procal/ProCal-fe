@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Image, Row, Col, Carousel, Button } from "react-bootstrap";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
+import "./MarketDetailModal.css"
 
 function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onDelete }) {
   const navigate = useNavigate();
@@ -48,8 +49,8 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
 
   return (
     <Modal show={show} onHide={onHide} centered size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>{item.title}</Modal.Title>
+      <Modal.Header closeButton className="marketdetail-modal-header">
+        <Modal.Title className="marketdetail-modal-title">{item.title}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -63,7 +64,7 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
                     alt={`image-${idx}`}
                     fluid
                     rounded
-                    style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                    className="marketdetailmodal-carousel-img"
                   />
                 </Carousel.Item>
               ))}
@@ -71,23 +72,19 @@ function MarketDetailModal({ show, onHide, item, currentUserId, onEditClick, onD
           </Col>
 
           <Col md={6}>
-            <div className="d-flex align-items-center mb-3">
+            <div className="marketdetailmodal-user-info">
               <Image
                 src={user.profileImage || "/default-profile.png"}
                 roundedCircle
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  objectFit: "cover",
-                  marginRight: "10px",
-                }}
               />
               <strong>{user.nickname || "익명 사용자"}</strong>
             </div>
 
-            <p><strong>설명:</strong> {item.description}</p>
-            <p><strong>가격:</strong> {typeof item.price === "number" ? item.price.toLocaleString() + "원" : "가격 미정"}</p>
-            <p><strong>상태:</strong> {item.status}</p>
+            <div className="marketdetailmodal-market-info">
+              <p><strong>설명:</strong> {item.description}</p>
+              <p><strong>가격:</strong> {typeof item.price === "number" ? item.price.toLocaleString() + "원" : "가격 미정"}</p>
+              <p><strong>상태:</strong> {item.status}</p>
+            </div>
 
             <div className="d-flex gap-2 mt-4">
               {!isOwner && (
