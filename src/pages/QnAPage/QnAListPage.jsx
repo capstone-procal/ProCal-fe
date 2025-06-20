@@ -5,6 +5,7 @@ import QnAWriteModal from "../../components/modals/QnAWriteModal";
 import { useNavigate } from "react-router-dom";
 import "./QnAListPage.css";
 import "../../styles/buttons.css";
+import "../../styles/chores.css";
 
 function QnAListPage() {
   const [posts, setPosts] = useState([]);
@@ -45,7 +46,7 @@ function QnAListPage() {
   return (
     <div className="Main-container">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="title">Q&A</h2>
+        <h1 className="qna-title">🙋🏻 Q&A</h1>
         <div className="d-flex align-items-center gap-2">
           <Dropdown onSelect={handleCategorySelect}>
             <Dropdown.Toggle variant="outline-primary" className="write-btn">
