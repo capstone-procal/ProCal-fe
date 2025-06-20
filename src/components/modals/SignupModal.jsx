@@ -116,7 +116,7 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSignup}>
+        <Button variant="secondary" onClick={handleSignup}>
           Sign Up
         </Button>
         <Button variant="secondary" onClick={onSwitchToLogin}>

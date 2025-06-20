@@ -3,12 +3,13 @@ import { Modal, Button, Form } from "react-bootstrap";
 import api from "../../utils/api";
 import "./ChatDetailModal.css";
 
-
 function ChatDetailModal({ room, onClose }) {
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
   const bottomRef = useRef(null);
   const userId = sessionStorage.getItem("userId");
+
+  const [isSending, setIsSending] = useState(false); //jiyun
 
   const fetchMessages = async () => {
     try {
@@ -33,8 +34,9 @@ function ChatDetailModal({ room, onClose }) {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!newMsg.trim()) return;
+  const handleSend = async () => { //jiyun
+    if (!newMsg.trim() || isSending) return;
+    setIsSending(true);
     try {
       await api.post("/chat/message", {
         roomId: room._id,
@@ -44,6 +46,8 @@ function ChatDetailModal({ room, onClose }) {
       fetchMessages();
     } catch (err) {
       console.error("메시지 전송 실패", err);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -57,7 +61,9 @@ function ChatDetailModal({ room, onClose }) {
           {messages.map((msg) => (
             <div
               key={msg._id}
-              className={`d-flex flex-column ${msg.isMine ? "align-items-end" : "align-items-start"}`}
+              className={`d-flex flex-column ${
+                msg.isMine ? "align-items-end" : "align-items-start"
+              }`}
             >
               <div className={`chat-bubble ${msg.isMine ? "mine" : "other"}`}>
                 <span className="sender">{msg.senderId.nickname}</span>
@@ -86,7 +92,7 @@ function ChatDetailModal({ room, onClose }) {
             value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === "Enter" && !e.repeat) {
                 e.preventDefault();
                 handleSend();
               }

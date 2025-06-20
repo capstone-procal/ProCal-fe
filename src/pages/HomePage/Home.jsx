@@ -76,7 +76,7 @@ const Home = () => {
               events.push({
                 title: `${cert.name} (${item.round}) 접수 시작`,
                 start: new Date(item.applicationStart).toISOString().split("T")[0],
-                color: colorMap[cert._id],
+                color: colorMap[cert._id] || '#d0d0d0', //jiyun
                 type: "application",
                 extendedProps: baseProps,
               });
@@ -85,7 +85,7 @@ const Home = () => {
               events.push({
                 title: `${cert.name} (${item.round}) 접수 마감`,
                 start: new Date(item.applicationEnd).toISOString().split("T")[0],
-                color: colorMap[cert._id],
+                color: colorMap[cert._id] || '#d0d0d0', //jiyun
                 type: "application",
                 extendedProps: baseProps,
               });
@@ -94,7 +94,7 @@ const Home = () => {
               events.push({
                 title: `${cert.name} (${item.round} ${item.type} 시험 시작)`,
                 start: new Date(item.examStart).toISOString().split("T")[0],
-                color: colorMap[cert._id],
+                color: colorMap[cert._id] || '#d0d0d0', //jiyun
                 type: "exam",
                 extendedProps: baseProps,
               });
@@ -103,7 +103,7 @@ const Home = () => {
               events.push({
                 title: `${cert.name} (${item.round} ${item.type} 시험 종료)`,
                 start: new Date(item.examEnd).toISOString().split("T")[0],
-                color: colorMap[cert._id],
+                color: colorMap[cert._id] || '#d0d0d0', //jiyun
                 type: "exam",
                 extendedProps: baseProps,
               });
@@ -112,7 +112,7 @@ const Home = () => {
               events.push({
                 title: `${cert.name} (${item.round}) 결과 발표`,
                 start: new Date(item.resultDate).toISOString().split("T")[0],
-                color: colorMap[cert._id],
+                color: colorMap[cert._id] || '#d0d0d0', //jiyun
                 type: "result",
                 extendedProps: baseProps,
               });
@@ -166,7 +166,7 @@ const Home = () => {
       setModalOpen(true);
       setSavedEvent(null);
     }
-    loadInitialData();
+    window.location.reload();//jiyun
   };
 
   const loadInitialData = async () => {
@@ -185,7 +185,7 @@ const Home = () => {
 
   useEffect(() => {
     loadInitialData();
-  }, []);
+  }, [isLoggedIn]); //jiyun
 
   useEffect(() => {
     setExamEvents(filterEvents(allEvents, visibleTypes, showOnlyBookmarked));
