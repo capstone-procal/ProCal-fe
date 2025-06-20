@@ -102,6 +102,7 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
+          
 
           <Form.Group controlId="signupNickname" className="mt-3">
             <Form.Label>Nickname</Form.Label>
