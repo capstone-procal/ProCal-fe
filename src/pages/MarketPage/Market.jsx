@@ -7,6 +7,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Dropdown, ButtonGroup } from "react-bootstrap";
 import "./Market.css"
 import "../../styles/buttons.css"
+import "../../styles/chores.css";
 
 function Market() {
   const [items, setItems] = useState([]);
@@ -77,7 +78,7 @@ function Market() {
   return (
     <Container className="Main-container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1 className="title">Market</h1>
+        <h1 className="market-title">🛒 Market</h1>
         <div className="d-flex gap-2 align-items-center">
 
           <Dropdown as={ButtonGroup} className="dropdown">

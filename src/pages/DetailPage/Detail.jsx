@@ -22,8 +22,6 @@ const Detail = () => {
     try {
       const res = await api.get(`/certificate/${id}`);
       setCertificate(res.data.certificate);
-
-      // 후기/팁 가져오기
       const reviewRes = await api.get(`/review/${id}`);
       const allReviews = reviewRes.data.reviews || [];
       const tips = allReviews.filter(r => r.category === "tip");
@@ -57,7 +55,7 @@ const Detail = () => {
     setShowModal(true);
   };  
 
-  const token = sessionStorage.getItem('token');//localStorage로 통일 할지 sessionStorage로 통일할지 의논 필요
+  const token = sessionStorage.getItem('token');
   const isLoggedIn = !!token;
 
   useEffect(() => {
@@ -70,15 +68,17 @@ const Detail = () => {
 
   return (
     <div className="detail-container">
-      <h2 className="detail-header">{certificate.name}</h2>
-      <p className="detail-section"><strong>분류:</strong> {certificate.category.join(', ')}</p>
-      <p className="detail-section"><strong>응시 자격:</strong> {certificate.eligibility}</p>
-      <p className="detail-section"><strong>합격 기준:</strong> {certificate.passingCriteria}</p>
-      <p className="detail-section">
+      <div className="detail-detail"> 
+        <h2 className="detail-header">{certificate.name}</h2>
+        <p className="detail-section"><strong>분류:</strong> {certificate.category.join(', ')}</p>
+        <p className="detail-section"><strong>응시 자격:</strong> {certificate.eligibility}</p>
+        <p className="detail-section"><strong>합격 기준:</strong> {certificate.passingCriteria}</p>
+        <p className="detail-section">
         <strong>공식 사이트:</strong> <a href={certificate.officialSite} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" style={{ color: 'black' }}>{certificate.officialSite}</a>
       </p>
+      </div>
 
-      <div className="mt-8">
+      <div className="detail-tabs">
         <Tabs defaultActiveKey="review" id="review-tab" className="mb-3">
           <Tab eventKey="review" title="후기">
             {reviewReviews.length > 0 ? (

@@ -5,6 +5,17 @@
   color: #000;
 }
 
+.detail-detail{
+  padding: 32px;
+  margin-bottom: 32px;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
 .detail-header {
   font-size: 1.75rem;
   font-weight: bold;
@@ -31,15 +42,10 @@
   gap: 10px;
 }
 
-.detail-write-btn {
-  background-color: #e0e0e0;
-  color: black;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-size: 0.9rem;
+.detail-tabs .nav-tabs .nav-link.active {
+  color: rgb(0, 0, 0) !important;
 }
 
-.detail-write-btn:hover {
-  background-color: #ccc;
+.detail-tabs .nav-tabs .nav-link {
+  color: rgb(124, 124, 124);
 }

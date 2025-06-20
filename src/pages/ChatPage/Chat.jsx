@@ -52,8 +52,8 @@ function Chat() {
 
   return (
   <div className="Main-container chat">
-    <h3 className="chat-title">채팅 목록</h3>
     <div className="chat-card">
+      <h1 className="chat-title">채팅 목록</h1>
       <ul className="chat-list">
         {conversations.map((conv) => {
           const unread = isUnread(conv);
