@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
 function PrivateRoute({ isLoggedIn, onRequireLogin, children }) {
-  const navigate = useNavigate();
+  const hasRequested = useRef(false);
+  const location = useLocation(); 
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      onRequireLogin(); 
+    if (!isLoggedIn && !hasRequested.current) {
+      onRequireLogin(location.pathname);
+      hasRequested.current = true;
     }
-  }, [isLoggedIn, onRequireLogin]);
+  }, [isLoggedIn, onRequireLogin, location]);
 
   if (!isLoggedIn) {
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   return children;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import api from "../../utils/api";
 import ChatDetailModal from "../../components/modals/ChatDetailModal";
-import "./Chat.css"
+import "./Chat.css";
 
 function Chat() {
   const [conversations, setConversations] = useState([]);
@@ -15,8 +15,12 @@ function Chat() {
         const res = await api.get("/chat/conversations");
 
         const sorted = [...res.data.conversations].sort((a, b) => {
-          const timeA = new Date(a.lastMessage?.createdAt || a.updatedAt || 0).getTime();
-          const timeB = new Date(b.lastMessage?.createdAt || b.updatedAt || 0).getTime();
+          const timeA = new Date(
+            a.lastMessage?.createdAt || a.updatedAt || 0
+          ).getTime();
+          const timeB = new Date(
+            b.lastMessage?.createdAt || b.updatedAt || 0
+          ).getTime();
           return timeB - timeA;
         });
 
@@ -50,7 +54,26 @@ function Chat() {
     return !lastMsg.isRead && String(lastMsg.senderId) !== userId;
   };
 
-  return (
+  const markAsRead = async (roomId) => {
+    //jiyun
+    try {
+      await api.patch(`/chat/room/${roomId}/read`);
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv._id === roomId && conv.lastMessage
+            ? {
+                ...conv,
+                lastMessage: { ...conv.lastMessage, isRead: true },
+              }
+            : conv
+        )
+      );
+    } catch (err) {
+      console.error("읽음 처리 실패", err);
+    }
+  };
+
+return (
   <div className="Main-container chat">
     <div className="chat-card">
       <h1 className="chat-title">채팅 목록</h1>
@@ -61,7 +84,12 @@ function Chat() {
             <li
               key={conv._id}
               className="chat-list-item"
-              onClick={() => !selectedRoom && setSelectedRoom(conv)}
+              onClick={() => { 
+                  if (!selectedRoom) {
+                    setSelectedRoom(conv);
+                    markAsRead(conv._id); 
+                  }
+                }}
               style={{ cursor: "pointer", fontWeight: unread ? "bold" : "normal" }}
             >
               <div className="chat-user">

@@ -7,8 +7,8 @@ import {
 import EditProfileModal from '../../components/modals/EditProfileModal';
 import "./MyPage.css"
 
-const AVAILABLE_COLORS = ['#54b5e2', '#eeb5ec', '#fa7f12', '#f6e705', '#1aba25'];
-//const AVAILABLE_COLORS = ['#a7d8f0','#f5c8e6','#ffc89e', '#fff6a5', '#b7e5b4'];
+const AVAILABLE_COLORS = ['#fad3cf', '#ffe0f2', '#d0e1d2', '#d1e2ff', '#cfd0fe']; //jiyun
+
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [myExams, setMyExams] = useState([]);
@@ -89,7 +89,7 @@ const MyPage = () => {
           <h2>{userInfo.name}님의 마이페이지</h2>
           <Col md={4} className="d-flex flex-column justify-content-center align-items-center">
             <Image
-              src={userInfo.profileImage || '/default-profile.png'}
+              src={userInfo.profileImage || "/profile.webp"} //jiyun
               roundedCircle
               fluid
               style={{ width: '120px', height: '120px', objectFit: 'cover' }}

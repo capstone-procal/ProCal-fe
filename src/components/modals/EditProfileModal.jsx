@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
-import api from '../../utils/api';
-import './EditProfileModal.css';
-import "../../styles/buttons.css"
-import CloudinaryUploadWidget from '../../utils/CloudinaryUploadWidget';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
+import api from "../../utils/api";
+import "./EditProfileModal.css";
+import "../../styles/buttons.css";
+import CloudinaryUploadWidget from "../../utils/CloudinaryUploadWidget";
 
 const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
-  const [name, setName] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [profileImage, setProfileImage] = useState('');
-  const [uploadError, setUploadError] = useState('');
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [uploadError, setUploadError] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
       setName(userInfo.name);
       setNickname(userInfo.nickname);
       setEmail(userInfo.email);
-      setProfileImage(userInfo.profileImage || '');
+      setProfileImage(userInfo.profileImage || "");
     }
   }, [userInfo]);
 
@@ -30,19 +30,21 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
 
     try {
       setSaving(true);
-      await api.put('/user/update', {
+      await api.put("/user/update", {
         name,
         nickname,
         email,
-        password: password || undefined,  // 비밀번호를 입력 안 했으면 undefined로 보내서 무시
+        password: password || undefined,
         profileImage,
       });
 
       onUpdate();
       onClose();
     } catch (error) {
-      console.error('회원정보 업데이트 실패', error);
-      alert(error.response?.data?.error || '회원정보 저장 중 오류가 발생했습니다.');
+      console.error("회원정보 업데이트 실패", error);
+      alert(
+        error.response?.data?.error || "회원정보 저장 중 오류가 발생했습니다."
+      );
     } finally {
       setSaving(false);
     }
@@ -50,7 +52,7 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
 
   const handleUploadImage = (url) => {
     setProfileImage(url);
-    setUploadError('');
+    setUploadError("");
   };
 
   return (
@@ -104,24 +106,42 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
 
           <Form.Group className="mt-3">
             <Form.Label>프로필 사진</Form.Label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <CloudinaryUploadWidget uploadImage={handleUploadImage} />
               {profileImage ? (
-                <img src={profileImage} alt="프로필" className="preview-image" />
+                <>
+                  <img
+                    src={profileImage} 
+                    alt="프로필"
+                    className="preview-image"
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => setProfileImage("")}
+                    disabled={saving}
+                  >
+                    삭제
+                  </Button>
+                </>
               ) : (
                 <div className="preview-placeholder">미리보기 없음</div>
               )}
             </div>
-            {uploadError && <Alert variant="danger" className="mt-2">{uploadError}</Alert>}
+            {uploadError && (
+              <Alert variant="danger" className="mt-2">
+                {uploadError}
+              </Alert>
+            )}
           </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
-        <Button className='write-btn' onClick={onClose} disabled={saving}>
+        <Button className="write-btn" onClick={onClose} disabled={saving}>
           취소
         </Button>
-        <Button className='write-btn' onClick={handleSave} disabled={saving}>
+        <Button className="write-btn" onClick={handleSave} disabled={saving}>
           {saving ? <Spinner size="sm" animation="border" /> : "저장"}
         </Button>
       </Modal.Footer>

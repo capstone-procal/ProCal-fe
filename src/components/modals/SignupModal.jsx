@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import api from '../../utils/api';
 
@@ -10,6 +10,18 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
   const [emailError, setEmailError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+  if (show) {
+    setEmail('');
+    setPassword('');
+    setName('');
+    setNickname('');
+    setEmailError('');
+    setErrorMessage('');
+    setSuccessMessage('');
+  }
+}, [show]);
 
   const validateEmail = (inputEmail) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
@@ -102,6 +114,7 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
+          
 
           <Form.Group controlId="signupNickname" className="mt-3">
             <Form.Label>Nickname</Form.Label>
@@ -116,7 +129,7 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSignup}>
+        <Button variant="secondary" onClick={handleSignup}>
           Sign Up
         </Button>
         <Button variant="secondary" onClick={onSwitchToLogin}>
