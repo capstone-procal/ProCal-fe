@@ -90,7 +90,6 @@ return (
                     markAsRead(conv._id); 
                   }
                 }}
-
               style={{ cursor: "pointer", fontWeight: unread ? "bold" : "normal" }}
             >
               <div className="chat-user">
