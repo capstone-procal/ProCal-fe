@@ -84,12 +84,9 @@ const MyPage = () => {
 
   return (
     <>
-      <div className="mypage-header">
-        <h2>{userInfo.name}님의 마이페이지</h2>
-      </div>
-
-      <Container className="py-4">
-        <Row className="mb-4">
+      <Container className="mypage-container">
+        <Row className="mypage-mine">
+          <h2>{userInfo.name}님의 마이페이지</h2>
           <Col md={4} className="d-flex flex-column justify-content-center align-items-center">
             <Image
               src={userInfo.profileImage || "/profile.webp"} //jiyun
@@ -165,7 +162,7 @@ const MyPage = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                     <Button
-                      variant="danger"
+                      className='write-btn'
                       size="sm"
                       onClick={() => handleDelete(exam.reminderId)}
                     >

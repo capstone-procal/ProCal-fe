@@ -5,6 +5,7 @@ import CommentList from "../../components/lists/CommentList";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import "./QnADetailPage.css";
 import "../../styles/buttons.css";
+import "../../styles/chores.css";
 
 function QnADetailPage() {
   const { postId } = useParams();
@@ -64,7 +65,7 @@ function QnADetailPage() {
   if (!post) return <Container className="py-4">로딩 중...</Container>;
 
   return (
-    <Container className="py-4">
+    <Container className="Main-container">
       {editMode ? (
         <Card className="p-4">
           <h3 className="mb-4">게시글 수정</h3>
@@ -103,7 +104,7 @@ function QnADetailPage() {
               <Button variant="secondary" onClick={() => setEditMode(false)}>
                 취소
               </Button>
-              <Button variant="primary" onClick={handleUpdate}>
+              <Button variant="secondary" onClick={handleUpdate}>
                 저장
               </Button>
             </div>

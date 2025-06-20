@@ -116,7 +116,7 @@ const EditProfileModal = ({ show, onClose, userInfo, onUpdate }) => {
                     className="preview-image"
                   />
                   <Button
-                    variant="outline-danger"
+                    variant="outline-secondary"
                     size="sm"
                     onClick={() => setProfileImage("")}
                     disabled={saving}

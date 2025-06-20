@@ -5,6 +5,10 @@
   font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
 }
 
+.qna-title{
+  padding-bottom: 30px;
+}
+
 .qnalist-post-item {
   background-color: #f0f0f0;
   border-radius: 10px;

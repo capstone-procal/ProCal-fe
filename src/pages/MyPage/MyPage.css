@@ -1,3 +1,8 @@
+.mypage-container{
+  max-width: 1000px;
+  margin: 0 auto; 
+}
+
 .mypage-header {
   width: 100%;
   padding: 2.5rem 1rem;
@@ -5,4 +10,14 @@
   font-weight: 600;
   font-size: 2rem;
   color: #333;
+}
+
+.mypage-mine{
+  padding: 32px;
+  margin-bottom: 32px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f0f0f0;
 }
