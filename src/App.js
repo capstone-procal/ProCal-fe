@@ -18,15 +18,15 @@ import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); //jiyun
+  const [isLoggedIn, setIsLoggedIn] = useState(null); 
   const [userRole, setUserRole] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const navigate = useNavigate();
 
-  const [redirectPath, setRedirectPath] = useState(null); //jiyun
+  const [redirectPath, setRedirectPath] = useState(null); 
 
-  useEffect(() => { //jiyun
+  useEffect(() => { 
     const token = sessionStorage.getItem("token");
     const role = sessionStorage.getItem("userRole");
     if (token) {
@@ -36,9 +36,9 @@ function App() {
     setIsLoggedIn(false);
   }
   }, []);
-  if (isLoggedIn === null) return null; //jiyun
+  if (isLoggedIn === null) return null; 
 
-  const handleRequireLogin = (path) => { //jiyun
+  const handleRequireLogin = (path) => { 
     setRedirectPath(path);
     setShowLoginModal(true);
   };
@@ -47,7 +47,7 @@ function App() {
     setShowLoginModal(true);
   };
 
-  const handleLoginSuccess = (role = "user") => { //jiyun
+  const handleLoginSuccess = (role = "user") => { 
   setIsLoggedIn(true);
   setUserRole(role);
   setShowLoginModal(false);
@@ -64,7 +64,7 @@ function App() {
     setUserRole(null);
     navigate("/");
 
-    window.location.reload(); //jiyun
+    window.location.reload(); 
   };
 
   return (
