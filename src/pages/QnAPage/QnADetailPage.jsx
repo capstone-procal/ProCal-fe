@@ -38,18 +38,23 @@ function QnADetailPage() {
   }, [postId]);
 
   const handleUpdate = async () => {
-    try {
-      await api.put(`/post/${postId}`, {
-        title,
-        content,
-        category
-      });
-      alert("수정되었습니다.");
-      setEditMode(false);
-    } catch (err) {
-      alert(err.message || "수정 실패");
-    }
-  };
+  try {
+    const updatedPost = {
+      title,
+      content,
+      category,
+    };
+    await api.put(`/post/${postId}`, updatedPost);
+    alert("수정되었습니다.");
+    setPost((prev) => ({
+      ...prev,
+      ...updatedPost,
+    }));
+    setEditMode(false);
+  } catch (err) {
+    alert(err.message || "수정 실패");
+  }
+};
 
   const handleDelete = async () => {
     if (!window.confirm("삭제하시겠습니까?")) return;
