@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import api from '../../utils/api';
 
+
 function SignupModal({ show, onClose, onSwitchToLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,18 +11,24 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
   const [emailError, setEmailError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
 
   useEffect(() => {
   if (show) {
-    setEmail('');
-    setPassword('');
-    setName('');
-    setNickname('');
-    setEmailError('');
-    setErrorMessage('');
-    setSuccessMessage('');
+    resetForm();
   }
 }, [show]);
+
+  const resetForm = () => {
+  setEmail('');
+  setPassword('');
+  setName('');
+  setNickname('');
+  setEmailError('');
+  setNicknameError('');
+  setErrorMessage('');
+  setSuccessMessage('');
+  };
 
   const validateEmail = (inputEmail) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
@@ -44,6 +51,15 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
       return;
     }
 
+    if (!email || !password || !name || !nickname) {
+    setErrorMessage("모든 항목을 입력해주세요.");
+    return;
+    }
+
+    setEmailError('');
+    setNicknameError('');
+    setErrorMessage('');
+
     try {
       const response = await api.post('/user', {
         email,
@@ -56,20 +72,40 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
 
       setSuccessMessage('회원가입 성공! 로그인 해주세요.');
       setErrorMessage('');
-
+      
       setTimeout(() => {
         onClose();
         onSwitchToLogin();
       }, 1500);
+
     } catch (error) {
-      console.error('회원가입 실패:', error);
-      setErrorMessage(error.response?.data?.error || '회원가입 실패');
+      console.log("전체 에러 객체:", error);
+
+      let errorMsg = '';
+
+      if (typeof error?.error === 'string') {
+        errorMsg = error.error.trim();
+      } else if (typeof error?.message === 'string') {
+        errorMsg = error.message.trim();
+      }
+
+      if (errorMsg === "이미 사용 중인 이메일입니다.") {
+      setEmailError("이미 사용 중인 이메일입니다.");
+    } else if (errorMsg === "이미 사용 중인 닉네임입니다.") {
+      setNicknameError("이미 사용 중인 닉네임입니다.");
+    } else {
+      setErrorMessage(errorMsg || '회원가입 실패');
+    }
+
       setSuccessMessage('');
     }
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal show={show} onHide={() => {
+      resetForm(); 
+      onClose();   
+    }} centered>
       <Modal.Header closeButton>
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
@@ -86,13 +122,13 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
               placeholder="이메일 입력" 
               value={email}
               onChange={handleEmailChange}
-              isInvalid={!!emailError}
+              isInvalid={emailError !== ''}
             />
-            {emailError && (
-              <Form.Text className="text-danger">
-                {emailError}
-              </Form.Text>
-            )}
+           {emailError && (
+        <Form.Control.Feedback type="invalid">
+          {emailError}
+        </Form.Control.Feedback>
+      )}
           </Form.Group>
 
           <Form.Group controlId="signupPassword" className="mt-3">
@@ -123,7 +159,13 @@ function SignupModal({ show, onClose, onSwitchToLogin }) {
               placeholder="닉네임 입력" 
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              isInvalid={!!nicknameError}
             />
+            {nicknameError && (
+        <Form.Control.Feedback type="invalid">
+          {nicknameError}
+        </Form.Control.Feedback>
+      )}
           </Form.Group>
         </Form>
       </Modal.Body>
