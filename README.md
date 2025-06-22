@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# 📅 ProCal - Certification Calendar Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**ProCal**은 사용자가 자격증 시험 일정을 한눈에 확인하고, 관련 후기 및 팁을 공유할 수 있는 캘린더 기반 웹 애플리케이션입니다.  
+Capstone Design 팀 프로젝트로 기획 및 개발되었습니다.
 
-## Available Scripts
+🔗 [배포 링크 바로가기](https://capstone-procal.netlify.app)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🛠️ 사용 기술 스택
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend
+- **React.js**
+- React Router
+- FullCalendar.js
+- Bootstrap
+- Context API
+- Axios
+- Figma (디자인)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Backend
+- **Node.js**, **Express**
+- MongoDB, Mongoose
+- CORS 설정
 
-### `npm test`
+### DevOps
+- Git, GitHub 협업
+- Netlify (Frontend 배포)
+- Heroku (Backend 배포)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ✨ 주요 기능
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| 기능 | 설명 |
+|------|------|
+| 📅 캘린더 뷰 | 자격증 시험 일정 확인 |
+| 🔍 검색 기능 | 자격증 이름으로 검색 가능 |
+| 📝 후기 작성 | 시험 후기 및 팁 작성 가능 (모달창) |
+| 🧾 마이페이지 | 즐겨찾기한 자격증 모아보기 |
+| 💬 Q&A / 마켓 | 사용자간 질문과 중고 교재 거래 |
+| 💻 반응형 | PC와 모바일 모두 대응 가능 |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 💡 프로젝트 목적
 
-### `npm run eject`
+- 자격증 일정 정보를 한곳에 모아 사용자 편의성 증대
+- 후기와 팁 공유를 통해 수험자 간 상호작용 강화
+- 전공 지식과 실무형 개발 경험을 함께 쌓기 위한 캡스톤 프로젝트
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🙋‍♀️ 팀원 소개
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| 이름 | 역할 |
+|------|------|
+| 전세현 | 프론트엔드 개발, UI/UX 디자인, 문서작업 |
+| 최지윤 | 백엔드 개발, 프론트엔드 개발 참여, DB 설계 |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 📷 주요 화면 미리보기
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> (이미지는 아래와 같이 깃허브에 올려서 링크로 넣거나, `/public`에 저장 후 상대 경로로 표시)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![홈페이지 캘린더](https://user-images.githubusercontent.com/your-image-link/home.png)
+![후기 모달](https://user-images.githubusercontent.com/your-image-link/modal.png)
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📬 문의
 
-### Analyzing the Bundle Size
+궁금하신 점은 GitHub Issues에 남겨주시거나, 아래 연락처로 문의해 주세요.  
+✉️ shjun1210@icloud.com
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
