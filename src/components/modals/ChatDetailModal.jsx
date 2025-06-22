@@ -9,7 +9,7 @@ function ChatDetailModal({ room, onClose }) {
   const bottomRef = useRef(null);
   const userId = sessionStorage.getItem("userId");
 
-  const [isSending, setIsSending] = useState(false); //jiyun
+  const [isSending, setIsSending] = useState(false); 
 
   const fetchMessages = async () => {
     try {
@@ -34,7 +34,7 @@ function ChatDetailModal({ room, onClose }) {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => { //jiyun
+  const handleSend = async () => { 
     if (!newMsg.trim() || isSending) return;
     setIsSending(true);
     try {
